@@ -19,8 +19,14 @@ class Drive{
     const byte IN3 = 9;
     const byte IN4 = 11;
     const byte ENA = 6;
-    int carSpeed = 200;
+    const byte carSpeed = 200; //controls vehicle speed. Didn't see any documentation for this, so I will be experimenting with this later
+    byte drive_status = 5; //this will allow the main loop to read the current status of vehicle motion
     long unsigned last_update= 0;
+    bool finished = false; // since the methods will be only checked once quickly we need a way to determine if the method has completely finished
+    float left_turn_rate = 0.0;//this is the degrees/millisecond turn rate
+    float right_turn_rate = 0.0;//this is the degrees/millisecond turn rate
+    float forward_rate = 0.0;// cm/millisecond
+
 
     void forward();
     void back();
@@ -82,18 +88,40 @@ void Drive::move_me(byte control){
   }
 }
 
-void Drive::drive_update(byte control, int control_time = 1000, bool force = false){
+void Drive::drive_update(byte control, int control_param, bool force = false){
+  /*This function handles the driving, it is designed to be used in the loop(), use move_me for situations where the method call will not be revisited.
+      control = direction that you wish to go, based off Drive::move_me
+      control_param = angle (degrees) or centimeters you would like to go in the control direction
+      force = override the current state and force a new control immediately. (used to avoid collisions)
+  */
+    
+
+  if(control==4 || control ==3){
+    //calculate milliseconds needed of turning for the angle to be met
+  }
+
+  if(control==4 || control ==3){
+    //calculate milliseconds needed of turning for the angle to be met
+  }
+
+  finished = false;
+
+  
+  
   if(force == true){
     this->move_me(control);
   }
-
-  if((millis()-last_update)>control_time){
-    last_update = millis();
-    this->stop();
-  }
-    
-  if((millis()-last_update)<control_time){
+  
+  if((millis()-last_update)<control_param){
     this->move_me(control);
+    drive_status = control;
+  }
+
+  if((millis()-last_update)>control_param){
+    last_update = millis();
+    this->move_me(5);
+    drive_status = 5;
+    finished = true;
   }
   
 }
@@ -122,16 +150,16 @@ class Ultrasonic{//class that controls the ultrasonic sensor and attached servo
 void Ultrasonic::real_ping(byte angle, int delay_time, int (&range)[181], Servo servo, NewPing Uranger){
 
   servo.write(angle);
-  Serial.println(angle);
   bool scan_done = false;
+  last_update = millis();
   
   while(scan_done == false){
     if((millis()-last_update)>=delay_time){
       range[angle] = Uranger.ping_cm();
+      if(range[angle] == 0){range[angle] = 100000;}
       scan_done = true;
     }
   }
-  Serial.println(scan_done);
 }
 
 void Ultrasonic::scan(int start_angle, int end_angle, int (&range)[181], Servo servo, NewPing Uranger, int delay_time = 100){
@@ -154,6 +182,12 @@ void Ultrasonic::scan(int start_angle, int end_angle, int (&range)[181], Servo s
     Serial.println("You are using the \"Ultrasonic::scan\" for a single degree, please use \"Ultrasonic::real_ping\" instead.");
   }
 }
+
+
+
+
+
+
 
 
 class Auto : public Drive{
@@ -193,14 +227,8 @@ bool servo_flip = false;
 
 
 
-
-
-
-
-
-
-
 //initialization. Sets pins and figures out which way to start. 
+//TODO: Include a calibration phase, currently dynamic constants are 
 void setup() {
     
   myservo.attach(3);  // attach servo on pin 3 to servo object
@@ -215,55 +243,73 @@ void setup() {
   pinMode(drive.ENB, OUTPUT);
   drive.stop();
 
-  //Go in a circle scanning 90 degree quadrants, keep track of the quadrant with the most room TODO: use gating function to 
-  int starting_position [3] = {0, 0, 0}; // where the vehicle should start { which quadrant the vehicle is in, angle of sensor, distance recorded at angle}
-  int current_position = 0;
-  int start_time = 0;
-
-  for(int i = 0; i!=4; i++){
-    //turns the vehicle 90 degrees 4 times. so that way that direction can be scanned
-    myservo.write(45);
-    delay(300);
-    
-    us.scan(45,135,us.ranges,myservo,ranger);
-      
-
-    if(us.ranges[brain.max_element(us.ranges,181)] > starting_position[2]){
-        starting_position[0] = i;
-        starting_position[1] = brain.max_element(us.ranges,181);
-        starting_position[2] = us.ranges[brain.max_element(us.ranges,181)];
-    } 
-
-    drive.drive_update(4,840);
+  //calibration code
+  int edges[3] = {10000,0,10000};// distance at 0,90, 180
+  int left_turn = 0;// keeps track of time needed to complete a left turn
+  int right_turn = 0;// similar to left_turn
+  int straight = 0;// similar to left_turn
+  us.real_ping(90,300, us.ranges, myservo, ranger);
+  edges[1] = us.ranges[90];
   
+  //calibrate left turn
+  drive.move_me(4);
+  
+  left_turn=millis();// begin timer
+  
+  while(edges[0] > (edges[1])){
+    us.real_ping(0,300, us.ranges, myservo, ranger);
+    edges[0] = us.ranges[0];
   }
 
+  left_turn = millis()-left_turn;// end timer, save difference
+  drive.left_turn_rate = 80/left_turn;
 
-  ////establish direction to go in
-  //equation based on emperical data, following equation converts position and angle into turning milliseconds
-  starting_position[0] = floor(((starting_position[0]+ .5 )*840)+ ((starting_position[1]-1)/.10588));
-
-  drive.drive_update(4, starting_position[0]);
-
-
-  //refine the starting position
-  current_position = 0;
-  starting_position[0] = 0;// TODO, look up what is the proper way of zeroing out the array, I forgot. 
-  starting_position[1] = 0;
-  starting_position[2] = 0;
-  
-  myservo.write(0);
+  //recenter vehicle
+  drive.move_me(5);
+  drive.move_me(3);
+  int temp_var = 10000;
+  myservo.write(90);
   delay(300);
-  us.scan(0,180,us.ranges,myservo,ranger);
-        
-  if( current_position > starting_position[2]){
-    starting_position[1] = brain.max_element(us.ranges,181);
-    starting_position[2] = us.ranges[brain.max_element(us.ranges,181)];
+  
+  while(temp_var > edges[1]){
+      Serial.println("Working");
+      us.real_ping(90,3, us.ranges, myservo, ranger);
+      temp_var = us.ranges[90];
   }
   
+  //calibrate right turn
+  myservo.write(180);
+  delay(300);
+  
+  right_turn=millis();// begin timer
+  
+  while(edges[2] > (edges[1])){
+    us.real_ping(180,3, us.ranges, myservo, ranger);
+    edges[2] = us.ranges[180];
+  }
 
-  starting_position[0] = abs(starting_position[1]-90)/.10588;
-  drive.drive_update(4,starting_position[0]);
+  right_turn = millis()-right_turn;// end timer,save difference
+  drive.right_turn_rate= 80/right_turn;
+
+  drive.move_me(5);
+
+  myservo.write(90);
+  while(true){
+  Serial.print(edges[0]); Serial.print("\t");
+  Serial.print(edges[1]); Serial.print("\t");
+  Serial.println(edges[2]);
+  }
+
+//  drive.last_update = millis();
+//  while(drive.finished == false){
+//    drive.drive_update(4,840);
+//  }
+//  drive.finished = false;
+    
+  
+
+
+
   
 }
 
@@ -291,17 +337,17 @@ void setup() {
 
 void loop() {
   
-  //This if-else causes the scanner to continuously scan
-  //  and populate the different angles
-  if(servo_flip == false){
-    us.scan(0,180,us.ranges,myservo,ranger);
-    servo_flip = true;
-  }
-  else{
-    us.scan(180,0,us.ranges,myservo,ranger);
-    servo_flip = false;
-  }
+//  //This if-else causes the scanner to continuously scan
+//  //  and populate the different angles
+//  if(servo_flip == false){
+//    us.scan(0,180,us.ranges,myservo,ranger);
+//    servo_flip = true;
+//  }
+//  else{
+//    us.scan(180,0,us.ranges,myservo,ranger);
+//    servo_flip = false;
+//  }
 
-  
+  ;//remove line
   
 }
