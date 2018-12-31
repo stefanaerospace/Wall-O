@@ -95,18 +95,15 @@ void Drive::drive_update(byte control, int control_param, bool force = false){
       force = override the current state and force a new control immediately. (used to avoid collisions)
   */
     
-
-  if(control==4 || control ==3){
+  if(control==1 || control == 2){
     //calculate milliseconds needed of turning for the angle to be met
   }
-
-  if(control==4 || control ==3){
+  
+  if(control==4 || control == 3){
     //calculate milliseconds needed of turning for the angle to be met
   }
 
   finished = false;
-
-  
   
   if(force == true){
     this->move_me(control);
@@ -156,7 +153,7 @@ void Ultrasonic::real_ping(byte angle, int delay_time, int (&range)[181], Servo 
   while(scan_done == false){
     if((millis()-last_update)>=delay_time){
       range[angle] = Uranger.ping_cm();
-      if(range[angle] == 0){range[angle] = 100000;}
+      if(range[angle] == 0){range[angle] = 401;}
       scan_done = true;
     }
   }
@@ -244,7 +241,7 @@ void setup() {
   drive.stop();
 
   //calibration code
-  int edges[3] = {10000,0,10000};// distance at 0,90, 180
+  long edges[3] = {10000,0,10000};// distance at 0,90, 180
   int left_turn = 0;// keeps track of time needed to complete a left turn
   int right_turn = 0;// similar to left_turn
   int straight = 0;// similar to left_turn
@@ -256,7 +253,7 @@ void setup() {
   
   left_turn=millis();// begin timer
   
-  while(edges[0] > (edges[1])){
+  while((edges[0]+20) > edges[1]){
     us.real_ping(0,300, us.ranges, myservo, ranger);
     edges[0] = us.ranges[0];
   }
@@ -271,9 +268,9 @@ void setup() {
   myservo.write(90);
   delay(300);
   
-  while(temp_var > edges[1]){
+  while((temp_var+1) > edges[1]){
       Serial.println("Working");
-      us.real_ping(90,3, us.ranges, myservo, ranger);
+      us.real_ping(90,1, us.ranges, myservo, ranger);
       temp_var = us.ranges[90];
   }
   
@@ -283,8 +280,8 @@ void setup() {
   
   right_turn=millis();// begin timer
   
-  while(edges[2] > (edges[1])){
-    us.real_ping(180,3, us.ranges, myservo, ranger);
+  while((edges[2]+20) > edges[1]){
+    us.real_ping(180,1, us.ranges, myservo, ranger);
     edges[2] = us.ranges[180];
   }
 
@@ -298,19 +295,7 @@ void setup() {
   Serial.print(edges[0]); Serial.print("\t");
   Serial.print(edges[1]); Serial.print("\t");
   Serial.println(edges[2]);
-  }
-
-//  drive.last_update = millis();
-//  while(drive.finished == false){
-//    drive.drive_update(4,840);
-//  }
-//  drive.finished = false;
-    
-  
-
-
-
-  
+  }  
 }
 
 
