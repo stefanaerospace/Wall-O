@@ -34,7 +34,7 @@ class Drive{
     void right();
     void stop();
     void move_me(byte);
-    void drive_update(byte, int);
+    void drive_update(int);
 };
   
 void Drive::forward(){
@@ -88,13 +88,25 @@ void Drive::move_me(byte control){
   }
 }
 
-void Drive::drive_update(byte control, int control_param){
+void Drive::drive_update(int control_param){
   /*This function handles the driving, it is designed to be used in the loop(), use move_me for situations where the method call will not be revisited.
-      control = direction that you wish to go, based off Drive::move_me
       control_param = angle (degrees) or centimeters you would like to go in the control direction
   */
+  int control = 0;
 
+  if(control_param < 100 || control_param > 80){
+    control = 1;
+  }
 
+  else if(control_param <= 80){
+    control = 3;
+    command_time = turn_rate*control_param;
+  }
+
+  else if(control_param >= 100){
+    control = 4;
+    command_time = turn_rate*control_param;
+  }
   
   if((millis()-last_update)<command_time){//if statment for when action is in process
     this->move_me(control);
@@ -107,19 +119,6 @@ void Drive::drive_update(byte control, int control_param){
     this->move_me(5);
     drive_status = 5;
     in_progress = false;
-  }
-
-  if(in_progress == false){
-      
-    if(control==1 || control == 2){
-      //calculate milliseconds needed of driving needed to meet condition
-      command_time = forward_rate*control_param;
-    }
-    
-    if(control==4 || control == 3){
-      //calculate milliseconds needed of turning for the angle to be met
-      command_time = turn_rate*control_param;
-    }
   }
 }
   
@@ -195,6 +194,7 @@ class Auto : public Drive{
 
     int max_element_left(int *,int,int,int);
     int max_element_right(int *,int,int,int);
+    int sliding_window(int *);
     void center(int *);
 };
 
@@ -229,19 +229,93 @@ void Auto::center(int * ranges){
     if(ranges[i]<6){
       collision_imminent = true;
       this->move_me(4); //turn left until no longer about to collide.
+      delay(300);
     }
-
-    else{collision_imminent = false;}
   }
   
   //centering
-  int direction_ =0;
+  int direction = 0;
   
   if(collision_imminent == false){
-    //direction_ = this->pathfind(arr);
-
-    
+    direction = this->sliding_window(ranges);
   }
+}
+
+int Auto::sliding_window(int * ranges){
+  /* This finds the best direction to go the farthest given a random set of obstacles and boundaries 
+   *  by finding a "window" that the vehicle can go through that has the highest average distance.
+   */
+  
+  int sum = 0;
+
+  for(int i=0; i<180; i++){// find the average for the whole array
+    sum = sum + ranges[i];
+  }
+  
+  int best_window[3] = {floor((sum/180)),180,0}; //keeps track of the window [average, left side, right side]
+
+  int candidate_window[3] = {0,0,0}; //candidate window
+  int mean = 0;//old mean, used to keep track of candidate window progress
+
+  bool shrink_window = false;//when false the window will 
+  bool tried = false;
+  bool new_window = true;
+
+  while(candidate_window[1] != 181){
+
+    if(candidate_window[0]>best_window[0]){//save the best window
+      best_window[0] = candidate_window[0];
+      best_window[1] = candidate_window[1];
+      best_window[2] = candidate_window[2];
+
+      //reset the candidate window to continue scanning the range
+      candidate_window[0] = candidate_window[0];
+      candidate_window[1] = candidate_window[2];
+      candidate_window[2] = candidate_window[2] + 1;
+      new_window = true;
+      shrink_window = false;
+      
+      if(candidate_window[2]>=180){break;}//edge case protection
+    }
+
+    else{ 
+      
+      sum = 0;
+      for(int i=candidate_window[1]; i<=candidate_window[2]; i++){// find the mean distance for the window
+        sum = sum + ranges[i];
+      }
+
+      candidate_window[0] = sum;
+
+      
+      if(shrink_window ==false){//expand the window to the right if the mean is increasing
+
+        candidate_window[2]++;
+      }
+
+      else{ // shrink the window by compressing from the left so long as the mean is increasing
+
+        candidate_window[1]++;
+        
+        new_window = false;
+      }
+    }
+
+    if(new_window = false && ((candidate_window[2]-candidate_window[1])<=1)){//incase the window shrinks too much, reset it
+
+      candidate_window[1] = candidate_window[1] + 1;
+      candidate_window[2] = candidate_window[1] + 2;
+
+      if(candidate_window[2]>=180){break;}//edge case protection
+
+      new_window = true;
+      
+    }
+  }
+
+
+  return floor((best_window[2]-best_window[1])/2);
+  
 }
 
 
@@ -258,7 +332,6 @@ bool servo_flip = false;
 
 
 //initialization. Sets pins and figures out which way to start. 
-//TODO: Include a calibration phase, currently dynamic constants are 
 void setup() {
     
   myservo.attach(3);  // attach servo on pin 3 to servo object
@@ -293,18 +366,6 @@ void setup() {
   brain.turn_rate = atan(6/(10/velocity))*180;
 
 }
-
-
-
-
-////Globals
-//Servo myservo;
-//Ultrasonic us;
-//Drive drive;
-//NewPing ranger(A5, A4, 400);
-//bool servo_flip = false;
-
-
 
 
 void loop() {
