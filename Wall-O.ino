@@ -90,7 +90,7 @@ void Drive::move_me(byte control){
 
 void Drive::drive_update(int control_param){
   /*This function handles the driving, it is designed to be used in the loop(), use move_me for situations where the method call will not be revisited.
-      control_param = angle (degrees) or centimeters you would like to go in the control direction
+      control_param = angle (degrees)you would like to go in the control direction
   */
   int control = 0;
 
@@ -140,7 +140,7 @@ class Ultrasonic{//class that controls the ultrasonic sensor and attached servo
     
     //methods
     void real_ping(byte, int, int (&)[181], Servo, NewPing);
-    void Ultrasonic::scan(int,int,int (&)[181], Servo, NewPing, int);
+    void scan(int,int,int (&)[181], Servo, NewPing, int);
 };
 
 void Ultrasonic::real_ping(byte angle, int delay_time, int (&range)[181], Servo servo, NewPing Uranger){
@@ -195,7 +195,7 @@ class Auto : public Drive{
     int max_element_left(int *,int,int,int);
     int max_element_right(int *,int,int,int);
     int sliding_window(int *);
-    void center(int *);
+    void center(int *, bool, Ultrasonic, Servo, NewPing);
 };
 
 int Auto::max_element_left(int * arr, int size, int start_, int end_){
@@ -222,23 +222,47 @@ int Auto::max_element_right(int * arr, int size, int start_, int end_){
  return maxIndex;
 }
 
-void Auto::center(int * ranges){
-  
+void Auto::center(int * ranges, bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
   //collision avoidance
-  for(int i = 45; i<135; i++){
-    if(ranges[i]<6){
-      collision_imminent = true;
-      this->move_me(4); //turn left until no longer about to collide.
-      delay(300);
+  do{
+    for(int i = 45; i<135; i++){
+      if(ranges[i]<6){
+        collision_imminent = true;
+        this->move_me(4); //turn left until no longer about to collide.
+        delay(300);
+      }
     }
-  }
+
+    if(collision_imminent = true){
+      
+      if(servo_flip == false){
+        us.scan(0,180,us.ranges,myservo,ranger);
+        servo_flip = true;
+      }
+      else{
+        us.scan(180,0,us.ranges,myservo,ranger);
+        servo_flip = false;
+      }
+      
+      for(int i = 45; i<135; i++){
+        collision_imminent = false;
+        if(ranges[i]<6){
+          collision_imminent = true;
+        }
+      }
+      this->move_me(5);
+    }
+    
+  } while (collision_imminent != false);
   
-  //centering
+  
+  //determine where to go next
   int direction = 0;
-  
-  if(collision_imminent == false){
-    direction = this->sliding_window(ranges);
+  direction = this->sliding_window(ranges);
+  if(direction = 0){
+    this->move_me(2);
   }
+  this->drive_update(direction);
 }
 
 int Auto::sliding_window(int * ranges){
@@ -252,7 +276,8 @@ int Auto::sliding_window(int * ranges){
     sum = sum + ranges[i];
   }
   
-  int best_window[3] = {floor((sum/180)),180,0}; //keeps track of the window [average, left side, right side]
+  
+  int best_window[3] = {(int)floor((sum/180)),180,0}; //keeps track of the window [average, left side, right side]
 
   int candidate_window[3] = {0,0,0}; //candidate window
   int mean = 0;//old mean, used to keep track of candidate window progress
@@ -269,7 +294,7 @@ int Auto::sliding_window(int * ranges){
       best_window[2] = candidate_window[2];
 
       //reset the candidate window to continue scanning the range
-      candidate_window[0] = candidate_window[0];
+      candidate_window[0] = 0;
       candidate_window[1] = candidate_window[2];
       candidate_window[2] = candidate_window[2] + 1;
       new_window = true;
@@ -314,7 +339,12 @@ int Auto::sliding_window(int * ranges){
   }
 
 
-  return floor((best_window[2]-best_window[1])/2);
+  if((int)floor((best_window[2]-best_window[1])/2)==0){
+    while(true){
+      this->move_me(2);
+    }
+  }
+  return (int)floor((best_window[2]-best_window[1])/2);
   
 }
 
@@ -383,6 +413,6 @@ void loop() {
   }
 
   //guidance for the vehicle
-  brain.center(us.ranges);
+  brain.center(us.ranges, servo_flip, us, myservo, ranger);
   
 }
