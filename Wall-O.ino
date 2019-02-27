@@ -2,7 +2,7 @@
 #include <Servo.h>
 #include <math.h> 
 
-#include "Dive.h"
+#include "Drive.h"
 #include "Ultrasonic.h"
 #include "Auto.h"
 
@@ -65,11 +65,11 @@ void loop() {
   //  and populate the different angles
   
   if(servo_flip == false){
-    us.scan(0,180,us.ranges,myservo,ranger);
+    //TODOus.scan(0,180,us.ranges,myservo,ranger);
     servo_flip = true;
   }
   else{
-    us.scan(180,0,us.ranges,myservo,ranger);
+    //TODOus.scan(180,0,us.ranges,myservo,ranger);
     servo_flip = false;
   }
 

@@ -1,5 +1,11 @@
 #ifndef AUTO_H_
 #define AUTO_H_
+#define uint8_t byte
+#include "Drive.h"
+#include "Ultrasonic.h"
+#include <Servo.h>
+#include <NewPing.h> //ultrasonic range finder lib
+
 
 class Auto : public Drive{
   public:

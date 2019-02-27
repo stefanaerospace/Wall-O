@@ -1,5 +1,7 @@
 #ifndef ULTRASONIC_H_
 #define ULTRASONIC_H_
+#include <Servo.h>
+#include <NewPing.h> //ultrasonic range finder lib
 
 
 class Ultrasonic{//class that controls the ultrasonic sensor and attached servo
@@ -12,7 +14,7 @@ class Ultrasonic{//class that controls the ultrasonic sensor and attached servo
     int ranges[181];
     
     //methods
-    void real_ping(byte, int, int (&)[181], Servo, NewPing);
+    void real_ping(int, int, int (&)[181], Servo, NewPing);
     void scan(int,int,int (&)[181], Servo, NewPing, int);
 };
 

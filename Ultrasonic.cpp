@@ -1,7 +1,7 @@
 #include "Ultrasonic.h"
 
 //scan a single degree
-void Ultrasonic::real_ping(byte angle, int delay_time, int (&range)[181], Servo servo, NewPing Uranger){
+void Ultrasonic::real_ping(int angle, int delay_time, int (&range)[181], Servo servo, NewPing Uranger){
 
   servo.write(angle);
   bool scan_done = false;

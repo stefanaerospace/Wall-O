@@ -1,4 +1,5 @@
 #include "Drive.h"
+#include "Arduino.h"
  
 //set motors to move the vehicle forward
 void Drive::forward(){
@@ -45,7 +46,7 @@ void Drive::stop() {
 }
 
 //simpler way of managing direction
-void Drive::move_me(byte control){
+void Drive::move_me(int control){
   switch(control){
     case 1: this->forward(); break;
     case 2: this->back(); break;
