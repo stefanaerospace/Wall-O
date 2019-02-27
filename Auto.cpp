@@ -40,11 +40,11 @@ void Auto::center(int * ranges, bool servo_flip, Ultrasonic us, Servo myservo, N
     if(collision_imminent = true){
       
       if(servo_flip == false){
-        //TODOus.scan(0,180,us.ranges,myservo,ranger);
+        us.scan(0,180,us.ranges,myservo,ranger);
         servo_flip = true;
       }
       else{
-        //TODOus.scan(180,0,us.ranges,myservo,ranger);
+        us.scan(180,0,us.ranges,myservo,ranger);
         servo_flip = false;
       }
       

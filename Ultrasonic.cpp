@@ -17,7 +17,7 @@ void Ultrasonic::real_ping(int angle, int delay_time, int (&range)[181], Servo s
 }
 
 //scan through a range
-void Ultrasonic::scan(int start_angle, int end_angle, int (&range)[181], Servo servo, NewPing Uranger, int delay_time = 3){
+void Ultrasonic::scan(int start_angle, int end_angle, int (&range)[181], Servo servo, NewPing Uranger, int delay_time){
   
   last_update = millis();
   
