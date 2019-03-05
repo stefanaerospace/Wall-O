@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/stefan/Wall-O/Drive.cpp
+Drive.h
+/home/stefan/Wall-O/Drive.h
+
+/home/stefan/Wall-O/Drive.h
+Arduino.h
+/home/stefan/Wall-O/Arduino.h
+
+/home/stefan/Wall-O/tests/Drive_test.cpp
+gtest/gtest.h
+-
+../Drive.cpp
+/home/stefan/Wall-O/Drive.cpp
+

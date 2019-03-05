@@ -1,0 +1,3 @@
+/home/stefan/Wall-O/tests/CMakeFiles/rebuild_cache.dir
+/home/stefan/Wall-O/tests/CMakeFiles/runTests.dir
+/home/stefan/Wall-O/tests/CMakeFiles/edit_cache.dir

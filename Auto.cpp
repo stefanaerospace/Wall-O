@@ -1,6 +1,4 @@
 #include "Auto.h"
-#include <NewPing.h> //ultrasonic range finder lib
-#include "Ultrasonic.h"
 
 int Auto::max_element_left(int * arr, int size, int start_, int end_){
  int maxIndex = 0;

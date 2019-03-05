@@ -1,7 +1,10 @@
-#ifndef DRIVE_H_
-#define DRIVE_H_
+// Drive_test.h
+#include <gtest/gtest.h>
 
-#include "Arduino.h"
+#ifndef ARDUINO_H_
+#define ARDUINO_H_
+
+#endif
 
 class Drive{
   public:
@@ -29,6 +32,12 @@ class Drive{
     void move_me(int);
     void drive_update(int);
 };
- 
-#endif
+
+#include "../Drive.cpp"
+
+TEST(ProperGearing, move_me) {
+    Drive car;
+    car.move_me(1)
+    ASSERT_EQ(1, car.status);
+}
 

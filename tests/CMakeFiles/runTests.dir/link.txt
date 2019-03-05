@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/runTests.dir/Drive_test.cpp.o  -o runTests  -L/home/stefan/Wall-O/tests/lib -Wl,-rpath,/home/stefan/Wall-O/tests/lib -Wl,-Bstatic -lgtest -Wl,-Bdynamic -lpthread 

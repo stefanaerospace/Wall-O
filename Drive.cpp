@@ -1,5 +1,5 @@
 #include "Drive.h"
-#include "Arduino.h"
+
  
 //set motors to move the vehicle forward
 void Drive::forward(){
@@ -9,6 +9,7 @@ void Drive::forward(){
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
+  this->drive_status = 1;
 }
 
 void Drive::back() {
@@ -18,6 +19,17 @@ void Drive::back() {
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, HIGH);
   digitalWrite(IN4, LOW);
+  this->drive_status = 2;
+}
+
+void Drive::right() {
+  analogWrite(ENA, carSpeed);
+  analogWrite(ENB, carSpeed);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+  this->drive_status = 4;
 }
 
 //set motors to pivot the vehicle to the left like a tank
@@ -28,21 +40,14 @@ void Drive::left() {
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
-}
-
-void Drive::right() {
-  analogWrite(ENA, carSpeed);
-  analogWrite(ENB, carSpeed);
-  digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
+  this->drive_status = 3;
 }
 
 //set motors to stop moving
 void Drive::stop() {
   digitalWrite(ENA, LOW);
   digitalWrite(ENB, LOW);
+  this->drive_status = 5;
 }
 
 //simpler way of managing direction
