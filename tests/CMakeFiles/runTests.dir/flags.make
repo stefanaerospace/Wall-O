@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/stefan/bin/arduino-1.6.9/hardware/arduino/avr/cores/arduino/inc 
+CXX_INCLUDES = 
 

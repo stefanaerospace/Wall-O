@@ -1,6 +1,7 @@
 #include <NewPing.h> //ultrasonic range finder lib
 #include <Servo.h>
 #include <math.h> 
+#include <Arduino.h>
 
 #include "Drive.h"
 #include "Ultrasonic.h"

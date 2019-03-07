@@ -3,5 +3,6 @@
 
 CMakeFiles/runTests.dir/Drive_test.cpp.o: /home/stefan/Wall-O/Drive.cpp
 CMakeFiles/runTests.dir/Drive_test.cpp.o: /home/stefan/Wall-O/Drive.h
+CMakeFiles/runTests.dir/Drive_test.cpp.o: Arduino.cpp
 CMakeFiles/runTests.dir/Drive_test.cpp.o: Drive_test.cpp
 

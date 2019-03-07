@@ -3,6 +3,12 @@
 #include <Servo.h>
 #include <NewPing.h> //ultrasonic range finder lib
 
+#ifdef ARDUINO_VERSION
+#include "Arduino.h"
+#endif
+#ifndef ARDUINO_VERSION
+#include "tests/Arduino.cpp"
+#endif
 
 class Ultrasonic{//class that controls the ultrasonic sensor and attached servo
 

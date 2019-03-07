@@ -1,7 +1,8 @@
+//set motors to move the vehicle forward
+
 #include "Drive.h"
 
- 
-//set motors to move the vehicle forward
+
 void Drive::forward(){
   analogWrite(ENA, carSpeed);
   analogWrite(ENB, carSpeed);

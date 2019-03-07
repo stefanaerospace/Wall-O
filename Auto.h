@@ -1,6 +1,15 @@
 #ifndef AUTO_H_
 #define AUTO_H_
 #define uint8_t byte
+
+#ifdef ARDUINO_VERSION
+#include "Arduino.h"
+#endif
+#ifndef ARDUINO_VERSION
+#include "tests/Arduino.cpp"
+#endif
+
+
 #include "Drive.h"
 #include "Ultrasonic.h"
 #include <Servo.h>
