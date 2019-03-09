@@ -2,10 +2,10 @@
 #define AUTO_H_
 #define uint8_t byte
 
-#ifdef ARDUINO_VERSION
+#ifdef ARDUINO
 #include "Arduino.h"
 #endif
-#ifndef ARDUINO_VERSION
+#ifndef ARDUINO
 #include "tests/Arduino.cpp"
 #endif
 

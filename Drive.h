@@ -1,17 +1,17 @@
 #ifndef DRIVE_H_
 #define DRIVE_H_
 
-#ifdef ARDUINO_VERSION
+#ifdef ARDUINO
 #include "Arduino.h"
 #endif
-#ifndef ARDUINO_VERSION
+#ifndef ARDUINO
 #include "tests/Arduino.cpp"
+#define HIGH 1
+#define LOW 0
 #endif
 
 class Drive{
-  public:
-    const int HIGH = 1;
-    const int LOW = 0; 
+  public: 
     const int ENB = 5;
     const int IN1 = 7;
     const int IN2 = 8;

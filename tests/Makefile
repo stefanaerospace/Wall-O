@@ -123,32 +123,32 @@ runTests/fast:
 	$(MAKE) -f CMakeFiles/runTests.dir/build.make CMakeFiles/runTests.dir/build
 .PHONY : runTests/fast
 
-Drive_test.o: Drive_test.cpp.o
+unit_test.o: unit_test.cpp.o
 
-.PHONY : Drive_test.o
+.PHONY : unit_test.o
 
 # target to build an object file
-Drive_test.cpp.o:
-	$(MAKE) -f CMakeFiles/runTests.dir/build.make CMakeFiles/runTests.dir/Drive_test.cpp.o
-.PHONY : Drive_test.cpp.o
+unit_test.cpp.o:
+	$(MAKE) -f CMakeFiles/runTests.dir/build.make CMakeFiles/runTests.dir/unit_test.cpp.o
+.PHONY : unit_test.cpp.o
 
-Drive_test.i: Drive_test.cpp.i
+unit_test.i: unit_test.cpp.i
 
-.PHONY : Drive_test.i
+.PHONY : unit_test.i
 
 # target to preprocess a source file
-Drive_test.cpp.i:
-	$(MAKE) -f CMakeFiles/runTests.dir/build.make CMakeFiles/runTests.dir/Drive_test.cpp.i
-.PHONY : Drive_test.cpp.i
+unit_test.cpp.i:
+	$(MAKE) -f CMakeFiles/runTests.dir/build.make CMakeFiles/runTests.dir/unit_test.cpp.i
+.PHONY : unit_test.cpp.i
 
-Drive_test.s: Drive_test.cpp.s
+unit_test.s: unit_test.cpp.s
 
-.PHONY : Drive_test.s
+.PHONY : unit_test.s
 
 # target to generate assembly for a file
-Drive_test.cpp.s:
-	$(MAKE) -f CMakeFiles/runTests.dir/build.make CMakeFiles/runTests.dir/Drive_test.cpp.s
-.PHONY : Drive_test.cpp.s
+unit_test.cpp.s:
+	$(MAKE) -f CMakeFiles/runTests.dir/build.make CMakeFiles/runTests.dir/unit_test.cpp.s
+.PHONY : unit_test.cpp.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... runTests"
 	@echo "... edit_cache"
-	@echo "... Drive_test.o"
-	@echo "... Drive_test.i"
-	@echo "... Drive_test.s"
+	@echo "... unit_test.o"
+	@echo "... unit_test.i"
+	@echo "... unit_test.s"
 .PHONY : help
 
 

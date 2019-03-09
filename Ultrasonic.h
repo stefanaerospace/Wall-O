@@ -1,13 +1,14 @@
 #ifndef ULTRASONIC_H_
 #define ULTRASONIC_H_
+#ifdef ARDUINO
+#include "Arduino.h"
 #include <Servo.h>
 #include <NewPing.h> //ultrasonic range finder lib
-
-#ifdef ARDUINO_VERSION
-#include "Arduino.h"
 #endif
-#ifndef ARDUINO_VERSION
+#ifndef ARDUINO
 #include "tests/Arduino.cpp"
+#include "tests/Servo.cpp"
+#include "tests/NewPing.h"
 #endif
 
 class Ultrasonic{//class that controls the ultrasonic sensor and attached servo

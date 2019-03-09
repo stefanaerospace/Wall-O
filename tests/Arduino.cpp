@@ -1,4 +1,5 @@
 //Arduino.cpp
+
 //This is a library of fake functions to substitute for Arduino.h functions
 #include<chrono>
 
@@ -29,5 +30,4 @@ void analogWrite(int a, int b){;}//just a dummy function, should eventually writ
 //that affects a motor class status
 
 void digitalWrite(int a, int b){;}//similar to analogWrite
-
 

@@ -70,6 +70,7 @@ void Drive::drive_update(int control_param){
 
   if(control_param < 100 || control_param > 80){
     control = 1;
+    command_time = 200;
   }
 
   else if(control_param <= 80){

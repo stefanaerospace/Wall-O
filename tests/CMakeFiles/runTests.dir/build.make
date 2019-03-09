@@ -57,38 +57,38 @@ include CMakeFiles/runTests.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/runTests.dir/flags.make
 
-CMakeFiles/runTests.dir/Drive_test.cpp.o: CMakeFiles/runTests.dir/flags.make
-CMakeFiles/runTests.dir/Drive_test.cpp.o: Drive_test.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/stefan/Wall-O/tests/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/runTests.dir/Drive_test.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/runTests.dir/Drive_test.cpp.o -c /home/stefan/Wall-O/tests/Drive_test.cpp
+CMakeFiles/runTests.dir/unit_test.cpp.o: CMakeFiles/runTests.dir/flags.make
+CMakeFiles/runTests.dir/unit_test.cpp.o: unit_test.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/stefan/Wall-O/tests/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/runTests.dir/unit_test.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/runTests.dir/unit_test.cpp.o -c /home/stefan/Wall-O/tests/unit_test.cpp
 
-CMakeFiles/runTests.dir/Drive_test.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/runTests.dir/Drive_test.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/stefan/Wall-O/tests/Drive_test.cpp > CMakeFiles/runTests.dir/Drive_test.cpp.i
+CMakeFiles/runTests.dir/unit_test.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/runTests.dir/unit_test.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/stefan/Wall-O/tests/unit_test.cpp > CMakeFiles/runTests.dir/unit_test.cpp.i
 
-CMakeFiles/runTests.dir/Drive_test.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/runTests.dir/Drive_test.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/stefan/Wall-O/tests/Drive_test.cpp -o CMakeFiles/runTests.dir/Drive_test.cpp.s
+CMakeFiles/runTests.dir/unit_test.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/runTests.dir/unit_test.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/stefan/Wall-O/tests/unit_test.cpp -o CMakeFiles/runTests.dir/unit_test.cpp.s
 
-CMakeFiles/runTests.dir/Drive_test.cpp.o.requires:
+CMakeFiles/runTests.dir/unit_test.cpp.o.requires:
 
-.PHONY : CMakeFiles/runTests.dir/Drive_test.cpp.o.requires
+.PHONY : CMakeFiles/runTests.dir/unit_test.cpp.o.requires
 
-CMakeFiles/runTests.dir/Drive_test.cpp.o.provides: CMakeFiles/runTests.dir/Drive_test.cpp.o.requires
-	$(MAKE) -f CMakeFiles/runTests.dir/build.make CMakeFiles/runTests.dir/Drive_test.cpp.o.provides.build
-.PHONY : CMakeFiles/runTests.dir/Drive_test.cpp.o.provides
+CMakeFiles/runTests.dir/unit_test.cpp.o.provides: CMakeFiles/runTests.dir/unit_test.cpp.o.requires
+	$(MAKE) -f CMakeFiles/runTests.dir/build.make CMakeFiles/runTests.dir/unit_test.cpp.o.provides.build
+.PHONY : CMakeFiles/runTests.dir/unit_test.cpp.o.provides
 
-CMakeFiles/runTests.dir/Drive_test.cpp.o.provides.build: CMakeFiles/runTests.dir/Drive_test.cpp.o
+CMakeFiles/runTests.dir/unit_test.cpp.o.provides.build: CMakeFiles/runTests.dir/unit_test.cpp.o
 
 
 # Object files for target runTests
 runTests_OBJECTS = \
-"CMakeFiles/runTests.dir/Drive_test.cpp.o"
+"CMakeFiles/runTests.dir/unit_test.cpp.o"
 
 # External object files for target runTests
 runTests_EXTERNAL_OBJECTS =
 
-runTests: CMakeFiles/runTests.dir/Drive_test.cpp.o
+runTests: CMakeFiles/runTests.dir/unit_test.cpp.o
 runTests: CMakeFiles/runTests.dir/build.make
 runTests: /usr/lib/libgtest.a
 runTests: CMakeFiles/runTests.dir/link.txt
@@ -100,7 +100,7 @@ CMakeFiles/runTests.dir/build: runTests
 
 .PHONY : CMakeFiles/runTests.dir/build
 
-CMakeFiles/runTests.dir/requires: CMakeFiles/runTests.dir/Drive_test.cpp.o.requires
+CMakeFiles/runTests.dir/requires: CMakeFiles/runTests.dir/unit_test.cpp.o.requires
 
 .PHONY : CMakeFiles/runTests.dir/requires
 

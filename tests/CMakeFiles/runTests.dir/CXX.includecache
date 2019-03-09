@@ -6,6 +6,24 @@
 
 #IncludeRegexTransform: 
 
+/home/stefan/Wall-O/Auto.cpp
+Auto.h
+/home/stefan/Wall-O/Auto.h
+
+/home/stefan/Wall-O/Auto.h
+Arduino.h
+/home/stefan/Wall-O/Arduino.h
+tests/Arduino.cpp
+/home/stefan/Wall-O/tests/Arduino.cpp
+Drive.h
+/home/stefan/Wall-O/Drive.h
+Ultrasonic.h
+/home/stefan/Wall-O/Ultrasonic.h
+Servo.h
+-
+NewPing.h
+-
+
 /home/stefan/Wall-O/Drive.cpp
 Drive.h
 /home/stefan/Wall-O/Drive.h
@@ -16,13 +34,31 @@ Arduino.h
 tests/Arduino.cpp
 /home/stefan/Wall-O/tests/Arduino.cpp
 
+/home/stefan/Wall-O/Ultrasonic.cpp
+Ultrasonic.h
+/home/stefan/Wall-O/Ultrasonic.h
+
+/home/stefan/Wall-O/Ultrasonic.h
+Servo.h
+-
+NewPing.h
+-
+Arduino.h
+/home/stefan/Wall-O/Arduino.h
+tests/Arduino.cpp
+/home/stefan/Wall-O/tests/Arduino.cpp
+
 /home/stefan/Wall-O/tests/Arduino.cpp
 chrono
 -
 
-/home/stefan/Wall-O/tests/Drive_test.cpp
+/home/stefan/Wall-O/tests/unit_test.cpp
 gtest/gtest.h
 -
 ../Drive.cpp
 /home/stefan/Wall-O/Drive.cpp
+../Ultrasonic.cpp
+/home/stefan/Wall-O/Ultrasonic.cpp
+../Auto.cpp
+/home/stefan/Wall-O/Auto.cpp
 
