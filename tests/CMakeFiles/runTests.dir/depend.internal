@@ -9,4 +9,6 @@ CMakeFiles/runTests.dir/unit_test.cpp.o
  /home/stefan/Wall-O/Ultrasonic.cpp
  /home/stefan/Wall-O/Ultrasonic.h
  /home/stefan/Wall-O/tests/Arduino.cpp
+ /home/stefan/Wall-O/tests/NewPing.cpp
+ /home/stefan/Wall-O/tests/Servo.cpp
  /home/stefan/Wall-O/tests/unit_test.cpp

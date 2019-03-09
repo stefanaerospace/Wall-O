@@ -1,3 +1,6 @@
+#ifndef ARDUINO_CPP
+#define ARDUINO_CPP
+
 //Arduino.cpp
 
 //This is a library of fake functions to substitute for Arduino.h functions
@@ -20,10 +23,13 @@
 //    return (int)((now1.count() -midnight1.count()));
 //}
 
-
 int millis(){
-	//return duration_since_midnight();
-	return 1000;
+	using namespace std::chrono;
+	auto now = system_clock::now();
+	auto now_ms = time_point_cast<milliseconds>(now);
+        auto epoch = now_ms.time_since_epoch();	
+	int now_long = (int)epoch.count();
+	return now_long;
 }
 
 void analogWrite(int a, int b){;}//just a dummy function, should eventually write as a function
@@ -31,3 +37,4 @@ void analogWrite(int a, int b){;}//just a dummy function, should eventually writ
 
 void digitalWrite(int a, int b){;}//similar to analogWrite
 
+#endif

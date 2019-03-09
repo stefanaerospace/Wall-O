@@ -1,3 +1,11 @@
+#ifndef ARDUINO
+#include<cmath>
+#define floor std::round
+
+void delay(int i){}
+
+#endif
+
 #include "Auto.h"
 
 int Auto::max_element_left(int * arr, int size, int start_, int end_){

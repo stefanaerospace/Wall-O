@@ -1,19 +1,19 @@
 #include "Ultrasonic.h"
-
+#include<stdio.h>
 //scan a single degree
 void Ultrasonic::real_ping(int angle, int delay_time, int (&range)[181], Servo servo, NewPing Uranger){
 
   servo.write(angle);
-  bool scan_done = false;
   last_update = millis();
-  
-  while(scan_done == false){
-    if((millis()-last_update)>=delay_time){
-      range[angle] = Uranger.ping_cm();
-      if(range[angle] == 0){range[angle] = 401;}
-      scan_done = true;
-    }
+  range[angle] = -1;
+  using namespace std; 
+  while((millis()-last_update)>=delay_time){
+    range[angle] = (int)Uranger.ping_cm();
+    if(range[angle] <= 0){range[angle] = 401;}
   }
+
+  cout<<"          ping_cm return: "<<Uranger.ping_cm()<<endl;
+  cout<<"          range[angle] return: "<<range[angle]<<endl;
 }
 
 //scan through a range
@@ -31,10 +31,6 @@ void Ultrasonic::scan(int start_angle, int end_angle, int (&range)[181], Servo s
   for(int angle = start_angle; angle>=end_angle; angle--){
       this->real_ping(angle, delay_time, range, servo, Uranger);
     }
-  }
-
-  if(start_angle == end_angle){
-    Serial.println("You are using the \"Ultrasonic::scan\" method for a single degree, please use \"Ultrasonic::real_ping\" instead.");
   }
 }
 

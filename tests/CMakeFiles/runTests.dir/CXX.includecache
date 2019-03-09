@@ -7,22 +7,28 @@
 #IncludeRegexTransform: 
 
 /home/stefan/Wall-O/Auto.cpp
+cmath
+-
 Auto.h
 /home/stefan/Wall-O/Auto.h
 
 /home/stefan/Wall-O/Auto.h
 Arduino.h
 /home/stefan/Wall-O/Arduino.h
-tests/Arduino.cpp
-/home/stefan/Wall-O/tests/Arduino.cpp
-Drive.h
-/home/stefan/Wall-O/Drive.h
-Ultrasonic.h
-/home/stefan/Wall-O/Ultrasonic.h
 Servo.h
 -
 NewPing.h
 -
+tests/Arduino.cpp
+/home/stefan/Wall-O/tests/Arduino.cpp
+tests/Servo.cpp
+/home/stefan/Wall-O/tests/Servo.cpp
+tests/NewPing.cpp
+/home/stefan/Wall-O/tests/NewPing.cpp
+Drive.h
+/home/stefan/Wall-O/Drive.h
+Ultrasonic.h
+/home/stefan/Wall-O/Ultrasonic.h
 
 /home/stefan/Wall-O/Drive.cpp
 Drive.h
@@ -37,23 +43,35 @@ tests/Arduino.cpp
 /home/stefan/Wall-O/Ultrasonic.cpp
 Ultrasonic.h
 /home/stefan/Wall-O/Ultrasonic.h
+stdio.h
+-
 
 /home/stefan/Wall-O/Ultrasonic.h
+Arduino.h
+/home/stefan/Wall-O/Arduino.h
 Servo.h
 -
 NewPing.h
 -
-Arduino.h
-/home/stefan/Wall-O/Arduino.h
 tests/Arduino.cpp
 /home/stefan/Wall-O/tests/Arduino.cpp
+tests/Servo.cpp
+/home/stefan/Wall-O/tests/Servo.cpp
+tests/NewPing.cpp
+/home/stefan/Wall-O/tests/NewPing.cpp
 
 /home/stefan/Wall-O/tests/Arduino.cpp
 chrono
 -
 
+/home/stefan/Wall-O/tests/NewPing.cpp
+
+/home/stefan/Wall-O/tests/Servo.cpp
+
 /home/stefan/Wall-O/tests/unit_test.cpp
 gtest/gtest.h
+-
+stdio.h
 -
 ../Drive.cpp
 /home/stefan/Wall-O/Drive.cpp

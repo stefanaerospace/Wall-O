@@ -8,7 +8,7 @@
 #ifndef ARDUINO
 #include "tests/Arduino.cpp"
 #include "tests/Servo.cpp"
-#include "tests/NewPing.h"
+#include "tests/NewPing.cpp"
 #endif
 
 class Ultrasonic{//class that controls the ultrasonic sensor and attached servo

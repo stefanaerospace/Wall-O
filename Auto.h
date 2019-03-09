@@ -4,17 +4,19 @@
 
 #ifdef ARDUINO
 #include "Arduino.h"
+#include <Servo.h>
+#include <NewPing.h> //ultrasonic range finder lib
 #endif
+
 #ifndef ARDUINO
 #include "tests/Arduino.cpp"
+#include "tests/Servo.cpp"
+#include "tests/NewPing.cpp" //ultrasonic range finder lib
 #endif
 
 
 #include "Drive.h"
 #include "Ultrasonic.h"
-#include <Servo.h>
-#include <NewPing.h> //ultrasonic range finder lib
-
 
 class Auto : public Drive{
   public:
