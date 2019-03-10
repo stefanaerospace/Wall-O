@@ -35,24 +35,61 @@ TEST(Proper_Update_Command, drive_update){
 }
 
 TEST(Ping_Method, real_ping){
-	using namespace std;
 	Servo servo;
 	NewPing ranger;
-	ranger.ping_cm_return = 100;
 	Ultrasonic us;
 	int range[181] = {0};
-	cout<<"Entering the function"<<endl;
-        us.real_ping(101, 1, range, servo, ranger);
-	cout<<"exiting the function"<<endl;
-	int indexed_result = range[100];
-	cout<<"ping return: "<<ranger.ping_cm_return<<endl;
+	
+	int test_angle = 100;
+	/*do not let "test_angle" confuse you
+	 * it is the value the function should return
+	 * and the angle to index
+	 */
+	ranger.ping_cm_return = test_angle;
 
-//	for(int i =0; i<181;i++){
-//		cout<<i<<": "<<range[i]<<endl;
-//	}
-
-	ASSERT_EQ(100,indexed_result);
+        us.real_ping(test_angle, 1, range, servo, ranger);
+	
+	ASSERT_EQ(test_angle,range[test_angle]);
 }
+
+TEST(Scanning, scan){
+	Servo servo;
+	NewPing ranger;
+	Ultrasonic us;
+
+	ranger.ping_cm_return = 100;
+	int range[181] = {0};
+
+	//this should return a 100 on an earlier angle
+	int test_angle = 0;
+	us.scan(test_angle, 180, range, servo, ranger, 3);
+	ASSERT_EQ(100, range[test_angle]);
+	
+	
+	//this should return a 100 on a later angle
+        test_angle = 180;
+        us.scan(0, test_angle, range, servo, ranger, 3);
+	ASSERT_EQ(100, range[test_angle]);
+}
+
+TEST(Does_the_window_slide_Auto, sliding_window){
+	Servo servo;
+	NewPing ranger;
+	Auto brain;
+	int range[181] = {0};
+	
+	//This should return a 90 degree result
+	range[100] = 100;
+	int result = brain.sliding_window(range);
+
+	using namespace std;
+	cout<<"                 RESULT:  "<<result<<endl;
+	ASSERT_EQ(100, result);
+
+
+
+}
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

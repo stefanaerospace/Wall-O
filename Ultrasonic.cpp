@@ -5,15 +5,14 @@ void Ultrasonic::real_ping(int angle, int delay_time, int (&range)[181], Servo s
 
   servo.write(angle);
   last_update = millis();
-  range[angle] = -1;
-  using namespace std; 
+  
   while((millis()-last_update)>=delay_time){
-    range[angle] = (int)Uranger.ping_cm();
-    if(range[angle] <= 0){range[angle] = 401;}
+    ;//a do nothing loop, TODO , find a more elegant solution to this. See if you can tell when a servo no longer draws power.
   }
+  
+  range[angle] = (int)Uranger.ping_cm();
+  if(range[angle] <= 0){range[angle] = 401;}
 
-  cout<<"          ping_cm return: "<<Uranger.ping_cm()<<endl;
-  cout<<"          range[angle] return: "<<range[angle]<<endl;
 }
 
 //scan through a range

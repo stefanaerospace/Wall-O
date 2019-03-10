@@ -1,81 +1,82 @@
 #ifndef ARDUINO
 #include<cmath>
 #define floor std::round
-
 void delay(int i){}
-
 #endif
 
 #include "Auto.h"
 
-int Auto::max_element_left(int * arr, int size, int start_, int end_){
- int maxIndex = 0;
- int max = arr[maxIndex];
- for (int i=1; i<size; i++){
-   if (max<arr[i]){
-     max = arr[i];
-     maxIndex = i;
-   }
- }
- return maxIndex;
-}
+//TODO erase?
+//int Auto::max_element_left(int & arr, int size, int start_, int end_){
+// int maxIndex = 0;
+// int max = arr[maxIndex];
+// for (int i=1; i<size; i++){
+//   if (max<arr[i]){
+//     max = arr[i];
+//     maxIndex = i;
+//   }
+// }
+// return maxIndex;
+//}
+//
+//int Auto::max_element_right(int & arr, int size, int start_, int end_){
+// int maxIndex = 0;
+// int max = arr[maxIndex];
+// for (int i=180; i<size; i--){
+//   if (max<arr[i]){
+//     max = arr[i];
+//     maxIndex = i;
+//   }
+// }
+// return maxIndex;
+//}
 
-int Auto::max_element_right(int * arr, int size, int start_, int end_){
- int maxIndex = 0;
- int max = arr[maxIndex];
- for (int i=180; i<size; i--){
-   if (max<arr[i]){
-     max = arr[i];
-     maxIndex = i;
-   }
- }
- return maxIndex;
-}
 
-void Auto::center(int * ranges, bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
-  //collision avoidance
-  do{
-    for(int i = 45; i<135; i++){
-      if(ranges[i]<6){
-        collision_imminent = true;
-        this->move_me(4); //turn left until no longer about to collide.
-        delay(300);
-      }
-    }
 
-    if(collision_imminent = true){
-      
-      if(servo_flip == false){
-        us.scan(0,180,us.ranges,myservo,ranger);
-        servo_flip = true;
-      }
-      else{
-        us.scan(180,0,us.ranges,myservo,ranger);
-        servo_flip = false;
-      }
-      
-      for(int i = 45; i<135; i++){
-        collision_imminent = false;
-        if(ranges[i]<6){
-          collision_imminent = true;
-        }
-      }
-      this->move_me(5);
-    }
-    
-  } while (collision_imminent != false);
-  
-  
-  //determine where to go next
-  int direction = 0;
-  direction = this->sliding_window(ranges);
-  if(direction = 0){
-    this->move_me(2);
-  }
-  this->drive_update(direction);
-}
+//void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
+//  //collision avoidance
+//  do{
+//    for(int i = 45; i<135; i++){
+//      if(ranges[i]<6){
+//        collision_imminent = true;
+//        this->move_me(4); //turn left until no longer about to collide.
+//        delay(300);
+//      }
+//    }
+//
+//    if(collision_imminent = true){
+//      
+//      if(servo_flip == false){
+//        us.scan(0,180,us.ranges,myservo,ranger);
+//        servo_flip = true;
+//      }
+//      else{
+//        us.scan(180,0,us.ranges,myservo,ranger);
+//        servo_flip = false;
+//      }
+//      
+//      for(int i = 45; i<135; i++){
+//        collision_imminent = false;
+//        if(ranges[i]<6){
+//          collision_imminent = true;
+//        }
+//      }
+//      this->move_me(5);
+//    }
+//    
+//  } while (collision_imminent != false);
+//  
+//  
+//  //determine where to go next
+//  int direction = 0;
+//  direction = this->sliding_window(ranges);
+//  if(direction = 0){
+//    this->move_me(2);
+//  }
+//  this->drive_update(direction);
+//}
 
-int Auto::sliding_window(int * ranges){
+int Auto::sliding_window(int (&ranges)[181]){
   /* This finds the best direction to go the farthest given a random set of obstacles and boundaries 
    *  by finding a "window" that the vehicle can go through that has the highest average distance.
    */
