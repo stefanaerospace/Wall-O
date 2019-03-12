@@ -72,6 +72,22 @@ TEST(Scanning, scan){
 	ASSERT_EQ(100, range[test_angle]);
 }
 
+TEST(Centering_the_path, center){
+	Servo servo;
+	NewPing ranger;
+	Drive car;
+	Auto brain;
+	Ultrasonic us;
+	int range[181] = {7};
+	range[100] = 100;
+	
+	//this test needs to be modified, low fidelity 
+	brain.center(range, false, us, servo, ranger, car);
+
+	ASSERT_EQ(3, car.drive_status);
+
+}
+
 TEST(Does_the_window_slide_Auto, sliding_window){
 	Servo servo;
 	NewPing ranger;

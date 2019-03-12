@@ -6,36 +6,11 @@ void delay(int i){}
 
 #include "Auto.h"
 
-//TODO erase?
-//int Auto::max_element_left(int & arr, int size, int start_, int end_){
-// int maxIndex = 0;
-// int max = arr[maxIndex];
-// for (int i=1; i<size; i++){
-//   if (max<arr[i]){
-//     max = arr[i];
-//     maxIndex = i;
-//   }
-// }
-// return maxIndex;
-//}
-//
-//int Auto::max_element_right(int & arr, int size, int start_, int end_){
-// int maxIndex = 0;
-// int max = arr[maxIndex];
-// for (int i=180; i<size; i--){
-//   if (max<arr[i]){
-//     max = arr[i];
-//     maxIndex = i;
-//   }
-// }
-// return maxIndex;
-//}
-
-
-
-//void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
-//  //collision avoidance
+void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger,Drive car){
+  //collision avoidance
 //  do{
+//    collision_imminent = false;
+//
 //    for(int i = 45; i<135; i++){
 //      if(ranges[i]<6){
 //        collision_imminent = true;
@@ -55,26 +30,23 @@ void delay(int i){}
 //        servo_flip = false;
 //      }
 //      
-//      for(int i = 45; i<135; i++){
-//        collision_imminent = false;
-//        if(ranges[i]<6){
-//          collision_imminent = true;
-//        }
-//      }
+//    }
+//
+//    if(car.drive_status == 4){ 
 //      this->move_me(5);
 //    }
 //    
 //  } while (collision_imminent != false);
 //  
-//  
-//  //determine where to go next
-//  int direction = 0;
-//  direction = this->sliding_window(ranges);
-//  if(direction = 0){
-//    this->move_me(2);
-//  }
-//  this->drive_update(direction);
-//}
+  
+  //determine where to go next
+  int direction = 0;
+  direction = this->sliding_window(ranges);
+  if(direction = 0){//TODO after debugging is done, remove this
+    this->move_me(2);
+  }
+  this->drive_update(direction);
+}
 
 int Auto::sliding_window(int (&ranges)[181]){
   /* This finds the best direction to go the farthest given a random set of obstacles and boundaries 
@@ -137,7 +109,7 @@ int Auto::sliding_window(int (&ranges)[181]){
       }
     }
 
-    if(new_window = false && ((candidate_window[2]-candidate_window[1])<=1)){//incase the window shrinks too much, reset it
+    if(new_window = false && ((candidate_window[2]-candidate_window[1])<=1)){//in case the window shrinks too much, reset it
 
       candidate_window[1] = candidate_window[1] + 1;
       candidate_window[2] = candidate_window[1] + 2;

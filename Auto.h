@@ -24,9 +24,7 @@ class Auto : public Drive{
     unsigned long auto_last_update = millis();
     bool collision_imminent = false;
 
-    int max_element_left(int &,int,int,int);
-    int max_element_right(int &,int,int,int);
-    int sliding_window(int &);
-    void center(int &, bool, Ultrasonic, Servo, NewPing);
+    int sliding_window(int (&)[181]);
+    void center(int (&)[181], bool, Ultrasonic, Servo, NewPing, Drive);
 };
 #endif
