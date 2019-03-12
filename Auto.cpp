@@ -6,7 +6,7 @@ void delay(int i){}
 
 #include "Auto.h"
 
-void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger,Drive car){
+void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
   //collision avoidance
 //  do{
 //    collision_imminent = false;
@@ -32,7 +32,7 @@ void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myse
 //      
 //    }
 //
-//    if(car.drive_status == 4){ 
+//    if(this->drive_status == 4){ 
 //      this->move_me(5);
 //    }
 //    

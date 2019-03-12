@@ -25,6 +25,6 @@ class Auto : public Drive{
     bool collision_imminent = false;
 
     int sliding_window(int (&)[181]);
-    void center(int (&)[181], bool, Ultrasonic, Servo, NewPing, Drive);
+    void center(int (&)[181], bool, Ultrasonic, Servo, NewPing);
 };
 #endif
