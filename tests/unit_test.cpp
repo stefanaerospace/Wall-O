@@ -82,9 +82,9 @@ TEST(Centering_the_path, center){
 	range[100] = 100;
 	
 	//this test needs to be modified, low fidelity 
-	brain.center(range, false, us, servo, ranger, car);
+	brain.center(range, false, us, servo, ranger);
 
-	ASSERT_EQ(3, car.drive_status);
+	ASSERT_EQ(3, brain.drive_status);
 
 }
 
@@ -92,7 +92,7 @@ TEST(Does_the_window_slide_Auto, sliding_window){
 	Servo servo;
 	NewPing ranger;
 	Auto brain;
-	int range[181] = {0};
+	int range[181] = {7};
 	
 	//This should return a 90 degree result
 	range[100] = 100;

@@ -40,11 +40,11 @@ void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myse
 //  
   
   //determine where to go next
-  int direction = 0;
-  direction = this->sliding_window(ranges);
+  int direction = this->sliding_window(ranges);//TODO For some reason this is return 0
   if(direction = 0){//TODO after debugging is done, remove this
     this->move_me(2);
   }
+  std::cout<<"      proposed direction: "<<direction<<std::endl;
   this->drive_update(direction);
 }
 
