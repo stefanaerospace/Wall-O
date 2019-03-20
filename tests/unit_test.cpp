@@ -79,12 +79,12 @@ TEST(Centering_the_path, center){
 	Auto brain;
 	Ultrasonic us;
 	int range[181] = {7};
-	range[100] = 100;
+	range[30] = 100;
 	
 	//this test needs to be modified, low fidelity 
 	brain.center(range, false, us, servo, ranger);
 
-	ASSERT_EQ(3, brain.drive_status);
+	ASSERT_EQ(1, brain.drive_status);
 
 }
 
@@ -100,7 +100,7 @@ TEST(Does_the_window_slide_Auto, sliding_window){
 
 	using namespace std;
 	cout<<"                 RESULT:  "<<result<<endl;
-	ASSERT_EQ(100, result);
+	ASSERT_EQ(40, result);
 
 
 
