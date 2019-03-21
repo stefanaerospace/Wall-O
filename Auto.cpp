@@ -6,45 +6,40 @@ void delay(int i){}
 
 #include "Auto.h"
 
+#include "stdio.h"//TODO Remove
+
 void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
-  //collision avoidance
-//  do{
-//    collision_imminent = false;
-//
-//    for(int i = 45; i<135; i++){
-//      if(ranges[i]<6){
-//        collision_imminent = true;
-//        this->move_me(4); //turn left until no longer about to collide.
-//        delay(300);
-//      }
-//    }
-//
-//    if(collision_imminent = true){
-//      
-//      if(servo_flip == false){
-//        us.scan(0,180,us.ranges,myservo,ranger);
-//        servo_flip = true;
-//      }
-//      else{
-//        us.scan(180,0,us.ranges,myservo,ranger);
-//        servo_flip = false;
-//      }
-//      
-//    }
-//
-//    if(this->drive_status == 4){ 
-//      this->move_me(5);
-//    }
-//    
-//  } while (collision_imminent != false);
-//  
+  //collision avoidance 
+
+  do{
+    bool collision_imminent = false;
+
+    for(int i = 45; i<135; i++){
+      if(ranges[i]<6){
+        collision_imminent = true;
+        this->move_me(4); //turn left until no longer about to collide.
+      }
+    }
+
+    if(collision_imminent = true){
+      
+      if(servo_flip == false){
+        us.scan(0,180,us.ranges,myservo,ranger);
+        servo_flip = true;
+      }
+      else{
+        us.scan(180,0,us.ranges,myservo,ranger);
+        servo_flip = false;
+      }
+      
+    }
+
+  } while (collision_imminent != false);
+  
   
   //determine where to go next
-  int direction = this->sliding_window(ranges);//TODO For some reason this is return 0
-  if(direction = 0){//TODO after debugging is done, remove this
-    this->move_me(2);
-  }
-  std::cout<<"      proposed direction: "<<direction<<std::endl;
+  int direction = this->sliding_window(ranges);
+  std::cout<<"      proposed direction: "<<direction<<std::endl;//TODO Remove
   this->drive_update(direction);
 }
 

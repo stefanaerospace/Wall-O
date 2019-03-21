@@ -75,10 +75,14 @@ TEST(Scanning, scan){
 TEST(Centering_the_path, center){
 	Servo servo;
 	NewPing ranger;
+	ranger.ping_cm_return = 7;
 	Drive car;
 	Auto brain;
 	Ultrasonic us;
-	int range[181] = {7};
+	int range[181] = {0};
+	for(int x=0; x<=181; x++){
+	  range[x] = 7;
+	}
 	range[30] = 100;
 	
 	//this test needs to be modified, low fidelity 
