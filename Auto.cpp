@@ -55,12 +55,12 @@ int Auto::sliding_window(int (&ranges)[181]){
   }
   
   
-  int best_window[3] = {(int)floor((sum/180)),180,0}; //keeps track of the window [average, left side, right side]
+  int best_window = {(int)floor((sum/180)),180,0}; //keeps track of the window [average, left side, right side]
 
-  int candidate_window[3] = {0,0,0}; //candidate window
+  int candidate_window = {0,1,0}; //candidate window
   int mean = 0;//old mean, used to keep track of candidate window progress
 
-  bool shrink_window = false;//when false the window will 
+  bool shrink_window = false;//when false the window will continue expanding
   bool tried = false;
   bool new_window = true;
 
@@ -84,30 +84,31 @@ int Auto::sliding_window(int (&ranges)[181]){
     else{ 
       
       sum = 0;
+
       for(int i=candidate_window[1]; i<=candidate_window[2]; i++){// find the mean distance for the window
         sum = sum + ranges[i];
       }
 
-      candidate_window[0] = sum;
+      candidate_window[0] = sum/(candidate_window[1]-candidate_window[2]+1);//get the new average
 
       
       if(shrink_window ==false){//expand the window to the right if the mean is increasing
 
-        candidate_window[2]++;
+        candidate_window[1]++;
       }
 
       else{ // shrink the window by compressing from the left so long as the mean is increasing
 
-        candidate_window[1]++;
+        candidate_window[2]++;
         
         new_window = false;
       }
     }
 
-    if(new_window = false && ((candidate_window[2]-candidate_window[1])<=1)){//in case the window shrinks too much, reset it
+    if(new_window = false && ((candidate_window[2]-candidate_window[1])<=1)){//in case the window shrinks too much, reset it, such that it escapes the local minimum
 
-      candidate_window[1] = candidate_window[1] + 1;
-      candidate_window[2] = candidate_window[1] + 2;
+      candidate_window[1] = candidate_window[1] + 2;
+      candidate_window[2] = candidate_window[1] + 1;
 
       if(candidate_window[2]>=180){break;}//edge case protection
 
@@ -117,12 +118,12 @@ int Auto::sliding_window(int (&ranges)[181]){
   }
 
 
-  if((int)floor((best_window[2]-best_window[1])/2)==0){
+  if((int)floor((best_window[1]-best_window[2])/2)==0){
     while(true){
       this->move_me(2);
     }
   }
-  return (int)floor((best_window[2]-best_window[1])/2);
+  return (int)floor((best_window[1]-best_window[2])/2);
   
 }
 
