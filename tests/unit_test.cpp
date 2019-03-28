@@ -102,8 +102,6 @@ TEST(Does_the_window_slide_Auto, sliding_window){
 	range[100] = 100;
 	int result = brain.sliding_window(range);
 
-	using namespace std;
-	cout<<"                 RESULT:  "<<result<<endl;
 	ASSERT_EQ(40, result);
 
 
