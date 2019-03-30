@@ -63,7 +63,7 @@ void setup() {
 void loop() {
   
   //This if-else causes the scanner to continuously scan
-  //  and populate the different angles
+  //  and populate the different angles efficiently
   
   if(servo_flip == false){
     us.scan(0,180,us.ranges,myservo,ranger);
