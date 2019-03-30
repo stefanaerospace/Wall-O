@@ -6,8 +6,6 @@ void delay(int i){}
 
 #include "Auto.h"
 
-#include "stdio.h"//TODO Remove
-
 void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
   //collision avoidance 
 
@@ -46,29 +44,23 @@ int Auto::sliding_window(int (&ranges)[181]){
   /* This finds the best direction to go the farthest given a random set of obstacles and boundaries 
    *  by finding a "window" that the vehicle can go through that has the highest average distance.
    */
-  int candidate_window[] = {0,1,0}; //candidate window
+  int candidate_window[3]  = {0,1,0}; //candidate window
   int mean = 0;//old mean, used to keep track of candidate window progress
   bool shrink_window = false;//when false the window will continue expanding
-  bool new_window    = true;
+  bool new_window    = true;//prevents early termination caused by local minima 
   int right_shift_max_gate = 0;// this is the integer that decides if the window should be shrunk
- 
   int sum = 0;
 
   for(int i=0; i<180; i++){// find the average for the whole array
-    sum = sum + ranges[i];//TODO see if accumulate stl algo can be used here and still be compiled by arduino, replace for loop if possible
+    sum = sum + ranges[i];
   }
   sum = (int)floor(sum/181);
  
   int best_window[3] = {(int)floor((sum/180)),180,0}; //keeps track of the window [average, left side, right side]
 
-  int candidate_window[3] = {0,1,0}; //candidate window
-  int mean = 0;//old mean, used to keep track of candidate window progress
+  //End of variable setup
 
-  bool shrink_window = false;//when false the window will continue expanding
-  bool tried = false;
-  bool new_window = true;
-
-  while(candidate_window[1] != 181){
+  while(181 >= candidate_window[1]){
 
     if(candidate_window[0]>best_window[0]){//save the best window
       best_window[0] = candidate_window[0];
@@ -82,22 +74,33 @@ int Auto::sliding_window(int (&ranges)[181]){
       new_window          = true;
       shrink_window       = false;
       
-      if(candidate_window[1]>=180){break;}//end state trigger 
+//      if(180 <= candidate_window[1]){break;}//end state trigger //TODO REMOVE
     }
 
     else{ 
-      
+ 
+//      if(181 > candidate_window[1]){break;}//end state
+//        new_window = true;
+//      }    //TODO REMOVE 
+
       sum = 0;//calculate the new window average
 
       for(int i=candidate_window[1]; i<=candidate_window[2]; i++){// find the mean distance for the window
-        sum = sum + ranges[i];//TODO again, if std::accumulate can be compiled by arduino, use here
+        sum = sum + ranges[i];
       }
-       
+
       right_shift_max_gate = sum/(candidate_window[1]-candidate_window[2]+1);//get the new average
 
       if(right_shift_max_gate < candidate_window[0]){//see if
-        candidate_window[1]--;
-	shrink_window = true;
+	if(false == shrink_window){
+          candidate_window[1]--;
+	  shrink_window = true;
+	}
+
+	if(true == shrink_window){
+	  candidate_window[2]--;
+          shrink_window = false;
+	}
       }
      
       else{
@@ -120,21 +123,8 @@ int Auto::sliding_window(int (&ranges)[181]){
       candidate_window[1] = candidate_window[1] + 2;
       candidate_window[2] = candidate_window[1] + 1;
 
-      if(candidate_window[1]>=180){break;}//end state
-
-      new_window = true;
-      
-    }
   }
 
-
-  if((int)floor((best_window[1]-best_window[2])/2)==0){
-    while(true){
-      this->move_me(2);
-    }
-  }
-
-  std::cout<<"window returns: "<<best_window[1]<<" "<<best_window[2]<<"\n";
   return (int)floor((best_window[1]-best_window[2])/2);
   
 }
