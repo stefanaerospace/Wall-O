@@ -39,7 +39,6 @@ void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myse
   
   //determine where to go next
   int direction = this->sliding_window(ranges);
-  std::cout<<"      proposed direction: "<<direction<<std::endl;//TODO Remove
   this->drive_update(direction);
 }
 
@@ -55,9 +54,9 @@ int Auto::sliding_window(int (&ranges)[181]){
   }
   
   
-  int best_window = {(int)floor((sum/180)),180,0}; //keeps track of the window [average, left side, right side]
+  int best_window[3] = {(int)floor((sum/180)),180,0}; //keeps track of the window [average, left side, right side]
 
-  int candidate_window = {0,1,0}; //candidate window
+  int candidate_window[3] = {0,1,0}; //candidate window
   int mean = 0;//old mean, used to keep track of candidate window progress
 
   bool shrink_window = false;//when false the window will continue expanding
@@ -126,5 +125,3 @@ int Auto::sliding_window(int (&ranges)[181]){
   return (int)floor((best_window[1]-best_window[2])/2);
   
 }
-
-
