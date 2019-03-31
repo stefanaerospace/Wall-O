@@ -92,16 +92,16 @@ TEST(Centering_the_path, center){
 
 }
 
-//
-//TEST(Pathfinding_Test_Zero_case, sliding_window){
-//	Servo servo;
-//	NewPing ranger;
-//	Auto brain;
-//	//This should return a 90 degree result
-//	int range[181] = {0};
-//	int result = brain.sliding_window(range);
-//	ASSERT_EQ(90, result);
-//}
+
+TEST(Pathfinding_Test_Zero_case, sliding_window){
+	Servo servo;
+	NewPing ranger;
+	Auto brain;
+	//This should return a 90 degree result
+	int range[181] = {0};
+	int result = brain.sliding_window(range);
+	ASSERT_EQ(90, result);
+}
 
 TEST(Pathfinding_Test_D_Forward, sliding_window){
 	Servo servo;

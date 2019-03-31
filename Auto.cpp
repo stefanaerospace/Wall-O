@@ -124,14 +124,12 @@ int Auto::sliding_window(int (&ranges)[181]){
 
     }
 
+  }
+
 //TODO remove after debug code block between
     std::cout<<"\nCandidate: "<<candidate_window[0]<<","<<candidate_window[1]<<","<<candidate_window[2];
     std::cout<<"\nBest: "<<best_window[0]<<","<<best_window[1]<<","<<best_window[2]<<"\n";
-
-    if(candidate_window[2]<0){
-	    break;
-    }//TODO remove after debug
-  }
+//TODO
 
   return ((int)floor((best_window[1]-best_window[2])/2))+best_window[2]-1;
   
