@@ -38,7 +38,9 @@ void setup() {
   pinMode(brain.ENB, OUTPUT);
   brain.move_me(5);
 
+  myservo.write(0);
 
+  delay(10000);
 
   //calibration code
   int start_time = millis();

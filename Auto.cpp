@@ -40,29 +40,47 @@ void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myse
   this->drive_update(direction);
 }
 
+
+int average_range(int (&range)[181],int start, int end){
+  int sum = 0;
+
+  for(int i=start; i<end; i++){// find the average for the whole array
+    sum = sum + range[i];
+  }
+  return (int)floor(sum/(end-start+1));
+} 
+
+
 int Auto::sliding_window(int (&ranges)[181]){
   /* This finds the best direction to go the farthest given a random set of obstacles and boundaries 
    *  by finding a "window" that the vehicle can go through that has the highest average distance.
+   *  
+   *  The Servo has 0 degrees for the right, and 180 for the left
    */
   int candidate_window[3]  = {0,1,0}; //candidate window
   int mean = 0;//old mean, used to keep track of candidate window progress
   bool shrink_window = false;//when false the window will continue expanding
   bool new_window    = true;//prevents early termination caused by local minima 
   int right_shift_max_gate = 0;// this is the integer that decides if the window should be shrunk
-  int sum = 0;
-
-  for(int i=0; i<180; i++){// find the average for the whole array
-    sum = sum + ranges[i];
-  }
-  sum = (int)floor(sum/181);
- 
-  int best_window[3] = {(int)floor((sum/180)),180,0}; //keeps track of the window [average, left side, right side]
-
+  int best_window[3] = {average_range(ranges,0,180),91,89}; //keeps track of the window [average, left side, right side]
+  
   //End of variable setup
 
-  while(181 >= candidate_window[1]){
+  while(180 >= candidate_window[1]){
 
-    if(candidate_window[0]>best_window[0]){//save the best window
+     if(shrink_window ==false){//expand the window towards 180 if the mean is increasing
+       candidate_window[1]++;
+       new_window = true;
+     }
+
+     else{ // shrink the window by compressing from the 0 side so long as the mean is increasing
+       candidate_window[2]++;
+       new_window = false;
+     }
+
+    if((candidate_window[0]>=best_window[0]) && 
+	    best_window[2]-best_window[1]<candidate_window[2]-candidate_window[1]){
+		    
       best_window[0] = candidate_window[0];
       best_window[1] = candidate_window[1];
       best_window[2] = candidate_window[2];
@@ -73,32 +91,22 @@ int Auto::sliding_window(int (&ranges)[181]){
       candidate_window[2] = candidate_window[1];
       new_window          = true;
       shrink_window       = false;
-      
-//      if(180 <= candidate_window[1]){break;}//end state trigger //TODO REMOVE
+
     }
+    
 
     else{ 
- 
-//      if(181 > candidate_window[1]){break;}//end state
-//        new_window = true;
-//      }    //TODO REMOVE 
 
-      sum = 0;//calculate the new window average
+      right_shift_max_gate = average_range(ranges,candidate_window[2],candidate_window[1]);//get the new average 
 
-      for(int i=candidate_window[1]; i<=candidate_window[2]; i++){// find the mean distance for the window
-        sum = sum + ranges[i];
-      }
-
-      right_shift_max_gate = sum/(candidate_window[1]-candidate_window[2]+1);//get the new average
-
-      if(right_shift_max_gate < candidate_window[0]){//see if
+      if(right_shift_max_gate < candidate_window[0]){//see if the window has gone too far
 	if(false == shrink_window){
           candidate_window[1]--;
 	  shrink_window = true;
 	}
 
-	if(true == shrink_window){
-	  candidate_window[2]--;
+	if(true == shrink_window){//see if the window needs to be shrunk
+	  candidate_window[2]++;
           shrink_window = false;
 	}
       }
@@ -106,25 +114,25 @@ int Auto::sliding_window(int (&ranges)[181]){
       else{
         candidate_window[0] = right_shift_max_gate;
       }
-
-      if(shrink_window ==false){//expand the window towards 180 if the mean is increasing
-        candidate_window[1]++;
-	new_window = true;
-      }
-
-      else{ // shrink the window by compressing from the 0 side so long as the mean is increasing
-        candidate_window[2]++;
-        new_window = false;
-      }
     }
 
-    if(new_window == false && ((candidate_window[2]-candidate_window[1])<=1)){//in case the window shrinks too much, reset it, such that it escapes the local minimum
+    if(new_window == false && ((candidate_window[1]-candidate_window[2])<2)){//in case the window shrinks too much, reset it, such that it escapes the local minimum
 
       candidate_window[1] = candidate_window[1] + 2;
       candidate_window[2] = candidate_window[1] + 1;
+      new_window = true;
 
+    }
+
+//TODO remove after debug code block between
+    std::cout<<"\nCandidate: "<<candidate_window[0]<<","<<candidate_window[1]<<","<<candidate_window[2];
+    std::cout<<"\nBest: "<<best_window[0]<<","<<best_window[1]<<","<<best_window[2]<<"\n";
+
+    if(candidate_window[2]<0){
+	    break;
+    }//TODO remove after debug
   }
 
-  return (int)floor((best_window[1]-best_window[2])/2);
+  return ((int)floor((best_window[1]-best_window[2])/2))+best_window[2]-1;
   
 }

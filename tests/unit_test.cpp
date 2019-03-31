@@ -92,24 +92,53 @@ TEST(Centering_the_path, center){
 
 }
 
-TEST(Does_the_window_slide_Auto, sliding_window){
+//
+//TEST(Pathfinding_Test_Zero_case, sliding_window){
+//	Servo servo;
+//	NewPing ranger;
+//	Auto brain;
+//	//This should return a 90 degree result
+//	int range[181] = {0};
+//	int result = brain.sliding_window(range);
+//	ASSERT_EQ(90, result);
+//}
+
+TEST(Pathfinding_Test_D_Forward, sliding_window){
 	Servo servo;
 	NewPing ranger;
 	Auto brain;
-	int range[181] = {7};
-	
 	//This should return a 90 degree result
-	range[100] = 100;
+	int range[181] = {7};
+	range[90] = 190;
+	int result = brain.sliding_window(range);
+	ASSERT_EQ(90, result);
+}
+
+TEST(Pathfinding_Test_D_Left, sliding_window){
+	Servo servo;
+	NewPing ranger;
+	Auto brain;
+	//This should return a 90 degree result
+	int range[181] = {7};
+	range[170] = 190;
 	int result = brain.sliding_window(range);
 
 	ASSERT_EQ(40, result);
-
-
-
 }
 
+TEST(Pathfinding_Test_D_Right, sliding_window){
+	Servo servo;
+	NewPing ranger;
+	Auto brain;
+	//This should return a 90 degree result
+	int range[181] = {7};
+	range[10] = 190;
+	int result = brain.sliding_window(range);
 
-int main(int argc, char **argv) {
+	ASSERT_EQ(40, result);
+}
+
+int main(int argc, char **argv){
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS(); 
 }
