@@ -101,12 +101,10 @@ int Auto::sliding_window(int (&ranges)[181]){
 
       if(right_shift_max_gate < candidate_window[0]){//see if the window has gone too far
 	if(false == shrink_window){
-          candidate_window[1]--;
 	  shrink_window = true;
 	}
 
 	if(true == shrink_window){//see if the window needs to be shrunk
-	  candidate_window[2]++;
           shrink_window = false;
 	}
       }
