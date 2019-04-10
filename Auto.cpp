@@ -43,12 +43,31 @@ void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myse
 
 int average_range(int (&range)[181],int start, int end){
   int sum = 0;
+  int counter = 0;
 
-  for(int i=start; i<end; i++){// find the average for the whole array
+  if(end > 180){end = 180;}
+
+  for(int i=start; i<=end; i++){// find the average for the whole array
+    counter++;
     sum = sum + range[i];
+    
   }
-  return (int)floor(sum/(end-start+1));
+
+  sum = sum/counter;
+
+  return (int)floor(sum);
 } 
+
+
+
+void force_new_window(int (&range)[181],int (&window)[3]){//this resets the window to be farther to the right
+
+        window[1] = window[2];
+        window[2] = window[2]+2;
+        if(window[2]>180){window[0]=0;}
+
+        else{window[0] = average_range(range,window[1],window[2]);}
+}
 
 
 int Auto::sliding_window(int (&ranges)[181]){
@@ -57,78 +76,88 @@ int Auto::sliding_window(int (&ranges)[181]){
    *  
    *  The Servo has 0 degrees for the right, and 180 for the left
    */
-  int candidate_window[3]  = {0,1,0}; //candidate window
-  int mean = 0;//old mean, used to keep track of candidate window progress
-  bool shrink_window = false;//when false the window will continue expanding
-  bool new_window    = true;//prevents early termination caused by local minima 
-  int right_shift_max_gate = 0;// this is the integer that decides if the window should be shrunk
-  int best_window[3] = {average_range(ranges,0,180),91,89}; //keeps track of the window [average, left side, right side]
-  
-  //End of variable setup
 
-  while(180 >= candidate_window[1]){
+    int best[3]      = {0,0,0};//= {average_range(ranges,0,180),89,91}; //REMEMBER THAT THE SERVO IS 180 ON THE LEFT AND 0 ON THE RIGHT TODO : Make sure that the controler is correct in direction, you are changing it
+    int candidate[3] = {average_range(ranges,0,3),0,3};
+    int proposed_shift = 0;
+    int proposed_mean  = 0;
+    bool left_increment = false;
 
-     if(shrink_window ==false){//expand the window towards 180 if the mean is increasing
-       candidate_window[1]++;
-       new_window = true;
-     }
+    while(true){//break conditions inside the loop
 
-     else{ // shrink the window by compressing from the 0 side so long as the mean is increasing
-       candidate_window[2]++;
-       new_window = false;
-     }
+      if(candidate[0] >= best[0] && 
+         candidate[2]-candidate[1] >= best[2]-best[1]){
 
-    if((candidate_window[0]>=best_window[0]) && 
-	    best_window[2]-best_window[1]<candidate_window[2]-candidate_window[1]){
-		    
-      best_window[0] = candidate_window[0];
-      best_window[1] = candidate_window[1];
-      best_window[2] = candidate_window[2];
+           //make the candidate the new best
 
-      //reset the candidate window to continue scanning the range
-      candidate_window[0] = 0;
-      candidate_window[1] = candidate_window[1] + 1;
-      candidate_window[2] = candidate_window[1];
-      new_window          = true;
-      shrink_window       = false;
+           best[0] = candidate[0];
+           best[1] = candidate[1];
+           best[2] = candidate[2];
+           
+           //force the candidate window to a new position to continue exploring the range 
+           force_new_window(ranges,candidate);
+           left_increment = false;
 
-    }
-    
+           //exit criteria
+           if(candidate[2]>=180){break;} 
 
-    else{ 
-
-      right_shift_max_gate = average_range(ranges,candidate_window[2],candidate_window[1]);//get the new average 
-
-      if(right_shift_max_gate < candidate_window[0]){//see if the window has gone too far
-	if(false == shrink_window){
-	  shrink_window = true;
-	}
-
-	if(true == shrink_window){//see if the window needs to be shrunk
-          shrink_window = false;
-	}
       }
-     
-      else{
-        candidate_window[0] = right_shift_max_gate;
+
+      //propose incrementing the window
+
+      //if the right side is being incremented...expanding the window
+      if(false == left_increment){
+        proposed_shift = candidate[2] + 1; 
+        proposed_mean  = average_range(ranges,candidate[1],proposed_shift);
+
+        if(proposed_mean >= candidate[0]){
+                candidate[0] = proposed_mean;
+                candidate[2] = proposed_shift;
+        }
+
+        //if shifting to the right no longer yields positive results, start shrinking the window
+        else{left_increment = true;}
+
+        if(candidate[2]>180){break;}
+
       }
-    }
 
-    if(new_window == false && ((candidate_window[1]-candidate_window[2])<2)){//in case the window shrinks too much, reset it, such that it escapes the local minimum
 
-      candidate_window[1] = candidate_window[1] + 2;
-      candidate_window[2] = candidate_window[1] + 1;
-      new_window = true;
+      //if the left side is being incremented...shrinking the window
+      if(true == left_increment){
 
-    }
+        proposed_shift = candidate[1] + 1; 
+        proposed_mean  = average_range(ranges,proposed_shift,candidate[2]);
 
+        if(proposed_mean >= candidate[0]){
+          candidate[0] = proposed_mean;
+          candidate[1] = proposed_shift;
+        }
+
+        else{
+          left_increment = false;
+
+          //reject the local minima
+          force_new_window(ranges, candidate);
+          if(candidate[2]>=180){break;} 
+        }
+
+      }
+
+      //prevent the window from getting too small
+      if(candidate[2]-candidate[1]<=2){
+        force_new_window(ranges, candidate);
+        if(candidate[2]>=180){break;} 
+      }
   }
 
-//TODO remove after debug code block between
-    std::cout<<"\nCandidate: "<<candidate_window[0]<<","<<candidate_window[1]<<","<<candidate_window[2];
-    std::cout<<"\nBest: "<<best_window[0]<<","<<best_window[1]<<","<<best_window[2]<<"\n";
-//TODO
+  //TODO remove after debug code block between
+  std::cout<<"\nCandidate: "<<candidate[0]<<","<<candidate[1]<<","<<candidate[2];
+  std::cout<<"\nBest: "<<best[0]<<","<<best[1]<<","<<best[2]<<"\n";
+  //TODO
 
-  return ((int)floor((best_window[1]-best_window[2])/2))+best_window[2]-1;
-  
+
+
+  return((int)floor(((best[2]-best[1])/2)+best[1]));
+ 
 }

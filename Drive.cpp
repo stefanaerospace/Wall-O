@@ -72,11 +72,11 @@ void Drive::drive_update(int control_param){
   }
 
   else if(control_param <= 80){
-    this->drive_status = 3;
+    this->drive_status = 4;
   }
 
   else if(control_param >= 100){
-    this->drive_status = 4;
+    this->drive_status = 3;
   }
  
   this->move_me(this->drive_status);

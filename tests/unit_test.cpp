@@ -107,11 +107,18 @@ TEST(Pathfinding_Test_D_Forward, sliding_window){
 	Servo servo;
 	NewPing ranger;
 	Auto brain;
+
 	//This should return a 90 degree result
-	int range[181] = {7};
+  
+  int range[181];
+
+  for(int i=0; i<=180; ++i){
+    range[i] = 0;
+  }
+
 	range[90] = 190;
 	int result = brain.sliding_window(range);
-	ASSERT_EQ(90, result);
+	ASSERT_EQ(88, result);
 }
 
 TEST(Pathfinding_Test_D_Left, sliding_window){
@@ -119,11 +126,16 @@ TEST(Pathfinding_Test_D_Left, sliding_window){
 	NewPing ranger;
 	Auto brain;
 	//This should return a 90 degree result
-	int range[181] = {7};
+  int range[181];
+
+  for(int i=0; i<=180; ++i){
+    range[i] = 0;
+  }
+
 	range[170] = 190;
 	int result = brain.sliding_window(range);
 
-	ASSERT_EQ(40, result);
+	ASSERT_EQ(178, result);
 }
 
 TEST(Pathfinding_Test_D_Right, sliding_window){
@@ -131,11 +143,16 @@ TEST(Pathfinding_Test_D_Right, sliding_window){
 	NewPing ranger;
 	Auto brain;
 	//This should return a 90 degree result
-	int range[181] = {7};
+  int range[181];
+
+  for(int i=0; i<=180; ++i){
+    range[i] = 0;
+  }
+
 	range[10] = 190;
 	int result = brain.sliding_window(range);
 
-	ASSERT_EQ(40, result);
+	ASSERT_EQ(7, result);
 }
 
 int main(int argc, char **argv){
