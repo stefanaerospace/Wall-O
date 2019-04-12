@@ -27,7 +27,7 @@ bool servo_flip = false;
 void setup() {
     
   myservo.attach(3);  // attach servo on pin 3 to servo object
-  myservo.write(45);
+  myservo.write(90);
   delay(300);
   Serial.begin(9600);
   pinMode(brain.IN1, OUTPUT);
@@ -38,9 +38,6 @@ void setup() {
   pinMode(brain.ENB, OUTPUT);
   brain.move_me(5);
 
-  myservo.write(0);
-
-  delay(10000);
 
   //calibration code
   int start_time = millis();
