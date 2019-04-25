@@ -8,16 +8,25 @@ void delay(int i){}
 
 void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
   //collision avoidance 
-
+    
   do{
     bool collision_imminent = false;
 
     for(int i = 45; i<135; i++){
       if(ranges[i]<6){
         collision_imminent = true;
-        this->move_me(4); //turn left until no longer about to collide.
+        if(ranges[i]<4){
+            this->move_me(2); //back up
+            delay(200);
+        }
+        else{
+            this->move_me(4);
+            delay(200);
+        } //turn left until no longer about to collide.
       }
     }
+
+    this->move_me(5); 
 
     if(collision_imminent = true){
       
