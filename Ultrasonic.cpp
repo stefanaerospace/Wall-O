@@ -28,5 +28,6 @@ void Ultrasonic::scan(int start_angle, int end_angle, int (&range)[181], Servo s
   }
 
   else if(start_angle = end_angle){
-      this->real_ping(angle, delay_time, range, servo, Uranger);
+      this->real_ping(start_angle, delay_time, range, servo, Uranger);
+  }
 }

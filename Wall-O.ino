@@ -36,7 +36,7 @@ void setup() {
   pinMode(brain.IN4, OUTPUT);
   pinMode(brain.ENA, OUTPUT);
   pinMode(brain.ENB, OUTPUT);
-  brain.move_me(5);
+  brain.stop();
 
 
   //calibration code
@@ -46,11 +46,11 @@ void setup() {
   int start_range = us.ranges[90];
 
   while(us.ranges[90]!=(start_range-10)){//ping until 10 cm of distance is covered.
-    brain.move_me(1);
+    brain.forward();
     us.real_ping(90,1,us.ranges,myservo,ranger);
   }
   int velocity = millis();
-  brain.move_me(5);//stop the vehicle
+  brain.stop();
 
   //establish kinematic properties
   brain.forward_rate = 10/velocity;
@@ -74,6 +74,12 @@ void loop() {
   }
 
   //guidance for the vehicle
-  brain.center(us.ranges, servo_flip, us, myservo, ranger);
+  brain.control_command = brain.sliding_window(us.ranges);
   
+  //enact direction
+  brain.drive_update(brain.control_command);
+  
+  //while moving, scan for obstacles
+  brain.collision_avoidance(us.ranges, servo_flip, us, myservo, ranger);
+
 }

@@ -20,11 +20,12 @@
 
 class Auto : public Drive{
   public:
-    int control_command = 5; //this will start the vehicle in a stopped position
+    int control_command = 0; //this will save the desired angle
+    int command_start = 0; //this will save when a command is started
     unsigned long auto_last_update = millis();
     bool collision_imminent = false;
 
     int sliding_window(int (&)[181]);
-    void center(int (&)[181], bool, Ultrasonic, Servo, NewPing);
+    void collision_avoidance(int (&)[181], bool, Ultrasonic, Servo, NewPing);
 };
 #endif

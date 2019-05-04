@@ -6,55 +6,11 @@ void delay(int i){}
 
 #include "Auto.h"
 
-void Auto::center(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
-  //collision avoidance 
-    
-  do{
-    bool collision_imminent = false;
-
-    for(int i = 45; i<135; i++){
-      if(ranges[i]<6){
-        collision_imminent = true;
-        if(ranges[i]<4){
-            this->move_me(2); //back up
-            delay(200);
-        }
-        else{
-            this->move_me(4);
-            delay(200);
-        } //turn left until no longer about to collide.
-      }
-    }
-
-    this->move_me(5); 
-
-    if(collision_imminent = true){
-      
-      if(servo_flip == false){
-        us.scan(0,180,us.ranges,myservo,ranger);
-        servo_flip = true;
-      }
-      else{
-        us.scan(180,0,us.ranges,myservo,ranger);
-        servo_flip = false;
-      }
-      
-    }
-
-  } while (collision_imminent != false);
-  
-  
-  //determine where to go next
-  int direction = this->sliding_window(ranges);
-  this->drive_update(direction);
-}
-
-
 int average_range(int (&range)[181],int start, int end){
   int sum = 0;
   int counter = 0;
 
-  if(end > 180){end = 180;}
+  if(end > 180){end = 181;}//prevents human error
 
   for(int i=start; i<=end; i++){// find the average for the whole array
     counter++;
@@ -67,6 +23,41 @@ int average_range(int (&range)[181],int start, int end){
   return (int)floor(sum);
 } 
 
+
+
+void Auto::collision_avoidance(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
+  //collision avoidance 
+   
+  this->command_start=millis();//start timer
+
+  do{
+    this->collision_imminent = false;
+
+    for(int i = 45; i<135; i++){
+      if(ranges[i]<20){
+        collision_imminent = true;
+        if(ranges[i]<6){
+            this->back(); //back up
+            delay(300);
+        }
+        else{
+            if(average_range(ranges,0,89)<average_range(ranges,90,180)){this->left();}
+            else{this->right(); }
+            delay(400);
+        } 
+      }
+    }
+
+
+    if(collision_imminent = true){
+        this->stop();
+        break; 
+    }
+
+  } while ((millis()-this->command_start)<this->command_time);
+
+this->stop();
+}
 
 
 void force_new_window(int (&range)[181],int (&window)[3]){//this resets the window to be farther to the right

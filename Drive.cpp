@@ -61,11 +61,13 @@ void Drive::drive_update(int control_param){
   }
 
   else if(control_param <= 80){
-    this->left();
+   this->left();
+   command_time = (90-turn_rate)*control_param; //the vehicle is always pointed at 90 degrees
   }
 
   else if(control_param >= 100){
     this->right();
+    command_time = (turn_rate-90)*control_param;
   }
  
 }

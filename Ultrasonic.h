@@ -22,7 +22,7 @@ class Ultrasonic{//class that controls the ultrasonic sensor and attached servo
     
     //methods
     void real_ping(int, int, int (&)[181], Servo, NewPing);
-    void scan(int,int,int (&)[181], Servo, NewPing, int delay_time = 3);
+    void scan(int,int,int (&)[181], Servo, NewPing, int delay_time = 2);
 };
 
 #endif
