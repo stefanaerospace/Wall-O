@@ -51,34 +51,22 @@ void Drive::stop() {
   this->drive_status = 5;
 }
 
-//simpler way of managing direction
-void Drive::move_me(int control){
-  switch(control){
-    case 1: this->forward(); break;
-    case 2: this->back(); break;
-    case 3: this->right(); break;
-    case 4: this->left(); break;
-    case 5: this->stop(); break;
-  }
-}
-
 void Drive::drive_update(int control_param){
   /*This function handles the driving, it is designed to be used in the loop(), use move_me for situations where the method call will not be revisited.
       control_param = angle (degrees)you would like to go in the control direction
   */
 
   if(control_param < 100 && control_param > 80){
-    this->drive_status = 1;
+    this->forward();
   }
 
   else if(control_param <= 80){
-    this->drive_status = 4;
+    this->left();
   }
 
   else if(control_param >= 100){
-    this->drive_status = 3;
+    this->right();
   }
  
-  this->move_me(this->drive_status);
 }
  
