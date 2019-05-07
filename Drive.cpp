@@ -55,20 +55,21 @@ void Drive::drive_update(int control_param){
   /*This function handles the driving, it is designed to be used in the loop(), use move_me for situations where the method call will not be revisited.
       control_param = angle (degrees)you would like to go in the control direction
   */
-
-  if(control_param < 100 && control_param > 80){
+  
+  if(control_param < 120 && control_param > 60){
     this->forward();
+    this->command_time = (int)floor(this->distance/this->forward_rate);
   }
 
-  else if(control_param <= 80){
+  else if(control_param <= 60){
    this->left();
-   command_time = (90-turn_rate)*control_param; //the vehicle is always pointed at 90 degrees
+   this->command_time = (int)floor((90-this->command_time)/this->turn_rate); //the vehicle is always pointed at 90 degrees
   }
 
-  else if(control_param >= 100){
-    this->right();
-    command_time = (turn_rate-90)*control_param;
+  else if(control_param >= 120){
+    this->right();  
+    this->command_time = (int)floor((this->command_time-90)/this->turn_rate);
   }
- 
+
 }
  

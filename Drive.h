@@ -21,10 +21,9 @@ class Drive{
     const int carSpeed = 200; //controls vehicle speed. Didn't see any documentation for this, so I will be experimenting with this later
     int drive_status   = 5; //this will allow the main loop to read the current status of vehicle motion
     int command_time   = 0;//amount of time a drive command should go on for
-    long unsigned last_update = 0;
-    bool in_progress          = false; // since the methods will be only checked once quickly we need a way to determine if the method has completely finished
-    float turn_rate    = 0.0;//this is the degrees/millisecond turn rate
-    float forward_rate = 0.0;// cm/millisecond
+    int distance       = 0; //this stores the forward distance to be traveled
+    float turn_rate;//this is the degrees/millisecond turn rate
+    float forward_rate;// cm/millisecond
    
 
     void forward();
@@ -32,11 +31,9 @@ class Drive{
     void left();
     void right();
     void stop();
-    void move_me(int);
     void drive_update(int);
 };
 
 
 
 #endif
-

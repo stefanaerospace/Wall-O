@@ -25,38 +25,40 @@ int average_range(int (&range)[181],int start, int end){
 
 
 
-void Auto::collision_avoidance(int (&ranges)[181], bool servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
+void Auto::collision_avoidance(bool &servo_flip, Ultrasonic us, Servo myservo, NewPing ranger){
   //collision avoidance 
    
-  this->command_start=millis();//start timer
+  this->command_start = millis();//start timer
+    
+  while ((millis()-(this->command_start)) < this->command_time){
 
-  do{
-    this->collision_imminent = false;
+    if(servo_flip == false){
+      us.scan(0,180,us.ranges,myservo,ranger,1);
+      servo_flip = true;
+    }
+    else{
+      us.scan(180,0,us.ranges,myservo,ranger,1);
+      servo_flip = false;
+    }
 
-    for(int i = 45; i<135; i++){
-      if(ranges[i]<20){
-        collision_imminent = true;
-        if(ranges[i]<6){
+    for(int i = 0; i<180; i++){
+      if(us.ranges[i]<40){
+        if(us.ranges[i]<6){
             this->back(); //back up
-            delay(300);
+            delay(150);
+            this->stop();
+            break;
         }
         else{
-            if(average_range(ranges,0,89)<average_range(ranges,90,180)){this->left();}
+            if(average_range(us.ranges,0,89)<average_range(us.ranges,90,180)){this->left();}
             else{this->right(); }
-            delay(400);
+            delay(250);
+            this->stop();
+            break;
         } 
       }
     }
-
-
-    if(collision_imminent = true){
-        this->stop();
-        break; 
-    }
-
-  } while ((millis()-this->command_start)<this->command_time);
-
-this->stop();
+  } 
 }
 
 
@@ -151,7 +153,6 @@ int Auto::sliding_window(int (&ranges)[181]){
       }
   }
 
-
+  this->distance = ranges[(int)floor(((best[2]-best[1])/2)+best[1])];
   return((int)floor(((best[2]-best[1])/2)+best[1]));
- 
 }

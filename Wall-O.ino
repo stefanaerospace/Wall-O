@@ -45,17 +45,18 @@ void setup() {
   us.real_ping(90,300,us.ranges,myservo,ranger);//get sensor in position and get a quick ping
   int start_range = us.ranges[90];
 
-  while(us.ranges[90]!=(start_range-10)){//ping until 10 cm of distance is covered.
+  while(us.ranges[90]>(start_range-10)){//ping until 10 cm of distance is covered.
     brain.forward();
     us.real_ping(90,1,us.ranges,myservo,ranger);
+    
   }
-  int velocity = millis();
+  int travel_time = millis()-start_time;
   brain.stop();
 
   //establish kinematic properties
-  brain.forward_rate = 10/velocity;
-  brain.turn_rate = atan(6/(10/velocity))*180;
-
+  brain.forward_rate = 10.0000000/travel_time; //the division operator only produces the number of significant digits that are present in the arguements
+  
+  brain.turn_rate = ((brain.forward_rate/6.3500000))*(PI/180); //radius from center of vehicle to center of tire is 6.35 cm
 }
 
 
@@ -63,7 +64,7 @@ void loop() {
   
   //This if-else causes the scanner to continuously scan
   //  and populate the different angles efficiently
-  
+
   if(servo_flip == false){
     us.scan(0,180,us.ranges,myservo,ranger);
     servo_flip = true;
@@ -74,12 +75,24 @@ void loop() {
   }
 
   //guidance for the vehicle
+  Serial.print("Should be next");
+  Serial.print('\n');
+  
   brain.control_command = brain.sliding_window(us.ranges);
   
+  Serial.print(brain.control_command,7);
+  Serial.print('\n');
+
   //enact direction
-  brain.drive_update(brain.control_command);
+  //brain.drive_update(brain.control_command);
+
+//TODO REMOVE BELOW LINE
+brain.command_time = 0;
   
   //while moving, scan for obstacles
-  brain.collision_avoidance(us.ranges, servo_flip, us, myservo, ranger);
+  brain.collision_avoidance(servo_flip, us, myservo, ranger);
+
+  brain.stop();
+  
 
 }

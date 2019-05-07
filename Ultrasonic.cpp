@@ -6,7 +6,7 @@ void Ultrasonic::real_ping(int angle, int delay_time, int (&range)[181], Servo s
   servo.write(angle);
   delay(delay_time); 
   range[angle] = (int)Uranger.ping_cm();
-  if(range[angle] <= 0){range[angle] = 401;}
+  if(range[angle] <= 1){range[angle] = 401;}
 
 }
 
