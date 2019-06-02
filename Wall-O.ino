@@ -74,21 +74,12 @@ void loop() {
     servo_flip = false;
   }
 
-  //guidance for the vehicle
-  Serial.print("Should be next");
-  Serial.print('\n');
-  
+  //guidance for the vehicle  
   brain.control_command = brain.sliding_window(us.ranges);
-  
-  Serial.print(brain.control_command,7);
-  Serial.print('\n');
 
   //enact direction
-  //brain.drive_update(brain.control_command);
+  brain.drive_update(brain.control_command);
 
-//TODO REMOVE BELOW LINE
-brain.command_time = 0;
-  
   //while moving, scan for obstacles
   brain.collision_avoidance(servo_flip, us, myservo, ranger);
 

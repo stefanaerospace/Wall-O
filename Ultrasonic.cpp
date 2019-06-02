@@ -1,5 +1,10 @@
+#ifndef ARDUINO
+void delay(int i){}
+#endif
+
 #include "Ultrasonic.h"
 #include<stdio.h>
+
 //scan a single degree
 void Ultrasonic::real_ping(int angle, int delay_time, int (&range)[181], Servo servo, NewPing Uranger){
 

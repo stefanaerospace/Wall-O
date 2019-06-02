@@ -1,4 +1,4 @@
-# Install script for directory: /home/stefan/Wall-O/tests
+# Install script for directory: /home/stefan/Documents/Arduino Tutorials/Wall-O/tests
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/stefan/Wall-O/tests/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/stefan/Documents/Arduino Tutorials/Wall-O/tests/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,7 +1,6 @@
 #ifndef ARDUINO
 #include<cmath>
 #define floor std::round
-void delay(int i){}
 #endif
 
 #include "Auto.h"
@@ -10,12 +9,11 @@ int average_range(int (&range)[181],int start, int end){
   int sum = 0;
   int counter = 0;
 
-  if(end > 180){end = 181;}//prevents human error
+  if(end > 180){end = 180;}//prevents error
 
-  for(int i=start; i<=end; i++){// find the average for the whole array
+  for(int i=start; i<=end; i++){// find the average for the sub array
     counter++;
     sum = sum + range[i];
-    
   }
 
   sum = sum/counter;
@@ -29,7 +27,7 @@ void Auto::collision_avoidance(bool &servo_flip, Ultrasonic us, Servo myservo, N
   //collision avoidance 
    
   this->command_start = millis();//start timer
-    
+ 
   while ((millis()-(this->command_start)) < this->command_time){
 
     if(servo_flip == false){
@@ -42,7 +40,9 @@ void Auto::collision_avoidance(bool &servo_flip, Ultrasonic us, Servo myservo, N
     }
 
     for(int i = 0; i<180; i++){
+      //40 centimeters is about the distance it can travel during a scan
       if(us.ranges[i]<40){
+
         if(us.ranges[i]<6){
             this->back(); //back up
             delay(150);
@@ -79,7 +79,7 @@ int Auto::sliding_window(int (&ranges)[181]){
    *  The Servo has 0 degrees for the right, and 180 for the left
    */
 
-    int best[3]      = {0,0,0};//= {average_range(ranges,0,180),89,91}; //REMEMBER THAT THE SERVO IS 180 ON THE LEFT AND 0 ON THE RIGHT TODO : Make sure that the controler is correct in direction, you are changing it
+    int best[3]      = {average_range(ranges,0,180),89,91}; //REMEMBER THAT THE SERVO IS 180 ON THE LEFT AND 0 ON THE RIGHT
     int candidate[3] = {average_range(ranges,0,3),0,3};
     int proposed_shift = 0;
     int proposed_mean  = 0;
@@ -154,5 +154,6 @@ int Auto::sliding_window(int (&ranges)[181]){
   }
 
   this->distance = ranges[(int)floor(((best[2]-best[1])/2)+best[1])];
+
   return((int)floor(((best[2]-best[1])/2)+best[1]));
 }

@@ -6,29 +6,25 @@
 #include "../Ultrasonic.cpp"
 #include "../Auto.cpp"
 
-TEST(Proper_Gearing, move_me) {
+TEST(Proper_Gearing, direction_changes) {
     Drive car;
-    car.move_me(1);
+    car.forward();
     ASSERT_EQ(1, car.drive_status);
-    car.move_me(2);
+    car.back();
     ASSERT_EQ(2, car.drive_status);
-    car.move_me(3);
+    car.right();
     ASSERT_EQ(3, car.drive_status);
-    car.move_me(4);
+    car.left();
     ASSERT_EQ(4, car.drive_status);
-    car.move_me(5);
+    car.stop();
     ASSERT_EQ(5, car.drive_status);
 }
 
 TEST(Proper_Update_Command, drive_update){
     Drive car;
-    car.drive_update(79);
+    car.drive_update(120);
     ASSERT_EQ(3, car.drive_status);
-    car.drive_update(80);
-    ASSERT_EQ(3, car.drive_status);
-    car.drive_update(101);
-    ASSERT_EQ(4, car.drive_status);
-    car.drive_update(101);
+    car.drive_update(60);
     ASSERT_EQ(4, car.drive_status);
     car.drive_update(90);
     ASSERT_EQ(1, car.drive_status);
@@ -72,13 +68,17 @@ TEST(Scanning, scan){
 	ASSERT_EQ(100, range[test_angle]);
 }
 
-TEST(Centering_the_path, center){
-	Servo servo;
+TEST(Collision_Avoidance, collision_avoidance){
+	
+    Servo servo;
 	NewPing ranger;
 	ranger.ping_cm_return = 7;
 	Drive car;
 	Auto brain;
 	Ultrasonic us;
+
+    bool servo_flip = false;
+
 	int range[181] = {0};
 	for(int x=0; x<=181; x++){
 	  range[x] = 7;
@@ -86,9 +86,9 @@ TEST(Centering_the_path, center){
 	range[30] = 100;
 	
 	//this test needs to be modified, low fidelity 
-	brain.center(range, false, us, servo, ranger);
+	brain.collision_avoidance(servo_flip, us, servo, ranger);
 
-	ASSERT_EQ(1, brain.drive_status);
+	ASSERT_EQ(5, brain.drive_status);
 
 }
 

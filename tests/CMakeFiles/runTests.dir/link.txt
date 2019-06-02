@@ -1,1 +1,1 @@
-/usr/bin/c++    -rdynamic CMakeFiles/runTests.dir/unit_test.cpp.o  -o runTests  -L/home/stefan/Wall-O/tests/lib -Wl,-rpath,/home/stefan/Wall-O/tests/lib -Wl,-Bstatic -lgtest -Wl,-Bdynamic -lpthread 
+/usr/bin/c++    -rdynamic CMakeFiles/runTests.dir/unit_test.cpp.o  -o runTests  -L"/home/stefan/Documents/Arduino Tutorials/Wall-O/tests/lib" -Wl,-rpath,"/home/stefan/Documents/Arduino Tutorials/Wall-O/tests/lib" -Wl,-Bstatic -lgtest -Wl,-Bdynamic -lpthread 

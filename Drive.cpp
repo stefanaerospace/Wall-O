@@ -1,5 +1,7 @@
 //set motors to move the vehicle forward
-
+#ifndef ARDUINO
+#include <math.h>
+#endif
 #include "Drive.h"
 
 
@@ -56,6 +58,8 @@ void Drive::drive_update(int control_param){
       control_param = angle (degrees)you would like to go in the control direction
   */
   
+  using namespace std;
+
   if(control_param < 120 && control_param > 60){
     this->forward();
     this->command_time = (int)floor(this->distance/this->forward_rate);
