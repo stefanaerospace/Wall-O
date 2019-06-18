@@ -64,8 +64,3 @@ that the robot can enter.
 Originally the idea was to have the robot scan while moving and drive without stopping. It seems though that the robot moves too quickly for it to be able
 assess the environment properly. I could just set it to move away from obstacles as it sees them, but then it would be blindly turning. 
 
-##Todos for a better code base
-Reevaluate the servo_flip variable. Is it being properly used in both main() and centering()?
-
-Fix Auto(), I removed the move_me method, this will break Auto()...
-
